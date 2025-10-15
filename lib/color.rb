@@ -18,14 +18,3 @@ module Color # rubocop:disable Style/Documentation
     end
   end
 end
-
-# class Testing
-#   using Color
-
-#   def empty_square
-#     puts "\u265E".bg_color(:brown).fg_color(:black)
-#   end
-# end
-
-# test = Testing.new
-# test.empty_square
