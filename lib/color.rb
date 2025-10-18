@@ -9,12 +9,12 @@ module Color # rubocop:disable Style/Documentation
   refine String do
     def bg_color(color)
       rgb_val = COLORS[color]
-      "\e[48;2;#{rgb_val}m #{self} \e[0m"
+      "\e[48;2;#{rgb_val}m #{self}\e[0m"
     end
 
     def fg_color(color_name)
       rgb_val = COLORS[color_name]
-      "\e[38;2;#{rgb_val}m #{self}\e[0m"
+      "\e[38;2;#{rgb_val}m#{self}\e[0m"
     end
   end
 end
