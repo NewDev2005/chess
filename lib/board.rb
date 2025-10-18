@@ -23,8 +23,8 @@ class Board # rubocop:disable Style/Documentation
         end
       elsif key == '1'
         i = 0
-        WHITE_PIECES.each_key do |piece_name|
-          row.push(@alphabetic_coords[i] => Square.new(color_in_odd_rank(i), WHITE_PIECES[piece_name], :white))
+        BLACK_PIECES.each_key do |piece_name|
+          row.push(@alphabetic_coords[i] => Square.new(color_in_odd_rank(i), BLACK_PIECES[piece_name], :white))
           i += 1
         end
       elsif key == '7'
@@ -33,7 +33,7 @@ class Board # rubocop:disable Style/Documentation
         end
       elsif key == '2'
         (0..7).each do |i|
-          row.push(@alphabetic_coords[i] => Square.new(color_in_even_rank(i), WHITE_PAWN, :white))
+          row.push(@alphabetic_coords[i] => Square.new(color_in_even_rank(i), BLACK_PAWN, :white))
         end
       elsif %w[3 4 5 6].include?(key)
         if %w[4 6].include?(key)
