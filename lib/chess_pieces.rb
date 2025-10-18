@@ -13,17 +13,4 @@ module Pieces
   }.freeze
 
   BLACK_PAWN = "\u265F "
-
-  WHITE_PIECES = {
-    rook: "\u2656 ",
-    knight: "\u2658 ",
-    bishop: "\u2657 ",
-    queen: "\u2655 ",
-    king: "\u2654 ",
-    bishop2: "\u2657 ",
-    knight2: "\u2658 ",
-    rook2: "\u2656 "
-  }.freeze
-
-  WHITE_PAWN = "\u2659 "
 end
