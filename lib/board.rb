@@ -2,11 +2,13 @@
 
 require_relative 'square'
 require_relative 'chess_pieces'
+require_relative 'game_logic'
 
 class Board # rubocop:disable Style/Documentation
   attr_accessor :board
 
   include Pieces
+  include GameLogic
 
   def initialize
     @board = { '8' => [], '7' => [], '6' => [], '5' => [], '4' => [], '3' => [], '2' => [], '1' => [] }
@@ -63,6 +65,7 @@ class Board # rubocop:disable Style/Documentation
       puts ''
     end
     print_alphabetic_coords
+    puts ''
     puts ''
   end
 
