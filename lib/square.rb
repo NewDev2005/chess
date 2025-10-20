@@ -3,6 +3,8 @@
 require_relative 'color'
 require_relative 'chess_pieces'
 class Square # rubocop:disable Style/Documentation
+  attr_accessor :piece, :piece_color
+
   using Color
   def initialize(color, piece = '  ', piece_color = nil)
     @color = color
