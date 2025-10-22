@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Player # rubocop:disable Style/Documentation
-  attr_accessor :name, :color_piece, :select_piece, :select_sqr_to_place
+  attr_accessor :name, :color_pick, :select_piece, :select_sqr_to_place
 
   def initialize
     @name = nil
@@ -10,7 +10,7 @@ class Player # rubocop:disable Style/Documentation
     @select_sqr_to_place = nil
   end
 
-  def make_move
+  def prompt
     gets.chomp
   end
 end
