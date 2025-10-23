@@ -12,20 +12,30 @@ class PlayGame # rubocop:disable Style/Documentation
     @player2 = Player.new
   end
 
-  def set_players_name
-    enter_name('player1')
-    @player1.name = @player1.prompt
-    enter_name('player2')
-    @player2.name = @player2.prompt
+  def prompt_players_name
+    player_names = []
+    enter_name_message('player1')
+    player_names.push(@player1.prompt)
+    enter_name_message('player2')
+    player_names.push(@player2.prompt)
+    player_names
   end
 
-  def set_players_pieces_color
-    @player1.color_pick = @player1.prompt
-    @player2.color_pick = @player2.prompt
+  def assign_color_to_players_randomly
+    random_num = rand(0..1)
+    player_names = prompt_players_name
+    @player1.name = player_names[random_num]
+    @player1.color_pick = :white
+    player_names.each do |name|
+      @player2.name = name if name != player_names[random_num]
+      @player2.color_pick = :black
+    end
   end
 
-  def play
-    set_players_name
-    set_players_pieces_color
+  def start
+    assign_color_to_players_randomly
+    loop do
+      
+    end
   end
 end
