@@ -19,11 +19,15 @@ class Bishop # rubocop:disable Style/Documentation
   end
 
   def movement
-    p up_right_diagonal_moves(@current_position)
-    p down_right_diagonal_moves(@current_position)
-    p up_left_diagonal_moves(@current_position)
-    p down_left_diagonal_moves(@current_position)
+    {
+      up_right_diagonal_moves: up_left_diagonal_moves(@current_position),
+      down_right_diagonal_moves: down_right_diagonal_moves(@current_position),
+      up_left_diagonal_moves: up_left_diagonal_moves(@current_position),
+      down_left_diagonal_moves: down_left_diagonal_moves(@current_position)
+    }
   end
+
+  private
 
   def up_right_diagonal_moves(current_position)
     possible_moves = []
@@ -68,11 +72,4 @@ class Bishop # rubocop:disable Style/Documentation
     end
     possible_moves
   end
-
-  def split_chr_and_num(coord)
-    coord.split('')
-  end
 end
-
-bishop = Bishop.new(:white, 'd4')
-bishop.movement
