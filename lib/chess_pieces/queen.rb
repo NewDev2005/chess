@@ -1,4 +1,6 @@
-class Queen
+# frozen_string_literal: true
+
+class Queen # rubocop:disable Style/Documentation
   def initialize(color, current_position)
     @color = color
     @current_position = current_position
@@ -107,5 +109,3 @@ class Queen
     possible_moves
   end
 end
-queen = Queen.new(:white, 'd4')
-p queen.movement
