@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require_relative 'square'
-require_relative 'chess_pieces'
+require_relative 'chess_pieces_unicode'
 require_relative 'game_logic'
+require_relative 'chess_pieces/all_pieces'
 
 class Board # rubocop:disable Style/Documentation
   attr_accessor :board
@@ -15,37 +16,21 @@ class Board # rubocop:disable Style/Documentation
     @alphabetic_coords = %w[a b c d e f g h]
   end
 
-  def set_pieces # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
-    @board.each do |key, row| # rubocop:disable Metrics/BlockLength
+  def set_pieces # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+    @board.each do |key, row|
       if key == '8'
-        i = 0
-        BLACK_PIECES.each_key do |piece_name|
-          row.push(@alphabetic_coords[i] => Square.new(color_in_even_rank(i), BLACK_PIECES[piece_name], :black))
-          i += 1
-        end
+        create_instances_of_pieces(row, :light_color, :brown, :black)
       elsif key == '1'
-        i = 0
-        BLACK_PIECES.each_key do |piece_name|
-          row.push(@alphabetic_coords[i] => Square.new(color_in_odd_rank(i), BLACK_PIECES[piece_name], :white))
-          i += 1
-        end
+        create_instances_of_pieces(row, :brown, :light_color, :white)
       elsif key == '7'
-        (0..7).each do |i|
-          row.push(@alphabetic_coords[i] => Square.new(color_in_odd_rank(i), BLACK_PAWN, :black))
-        end
+        create_instances_of_black_pawns(row, :black)
       elsif key == '2'
-        (0..7).each do |i|
-          row.push(@alphabetic_coords[i] => Square.new(color_in_even_rank(i), BLACK_PAWN, :white))
-        end
+        create_instances_of_white_pawns(row, :white)
       elsif %w[3 4 5 6].include?(key)
         if %w[4 6].include?(key)
-          (0..7).each do |i|
-            row.push(@alphabetic_coords[i] => Square.new(color_in_even_rank(i)))
-          end
+          create_instances_of_squares_in_even_rank(row)
         elsif %w[3 5].include?(key)
-          (0..7).each do |i|
-            row.push(@alphabetic_coords[i] => Square.new(color_in_odd_rank(i)))
-          end
+          create_instances_of_squares_in_odd_ranks(row)
         end
       end
     end
@@ -54,19 +39,60 @@ class Board # rubocop:disable Style/Documentation
   def display_board
     print_alphabetic_coords
     puts ''
-    @board.each do |key, arr|
+    print_board_elements(@board)
+    print_alphabetic_coords
+    puts ''
+    puts ''
+  end
+
+  private
+
+  def create_instances_of_pieces(arr, sqr_color1, sqr_color2, piece_color) # rubocop:disable Metrics/AbcSize
+    arr.push('a' => Square.new(sqr_color1, Rook.new(sqr_color1, piece_color)))
+    arr.push('b' => Square.new(sqr_color2, Knight.new(sqr_color2, piece_color)))
+    arr.push('c' => Square.new(sqr_color1, Bishop.new(sqr_color1, piece_color)))
+    arr.push('d' => Square.new(sqr_color2, Queen.new(sqr_color2, piece_color)))
+    arr.push('e' => Square.new(sqr_color1, King.new(sqr_color1, piece_color)))
+    arr.push('f' => Square.new(sqr_color2, Bishop.new(sqr_color2, piece_color)))
+    arr.push('g' => Square.new(sqr_color1, Knight.new(sqr_color1, piece_color)))
+    arr.push('h' => Square.new(sqr_color2, Rook.new(sqr_color2, piece_color)))
+  end
+
+  def create_instances_of_black_pawns(arr, piece_color)
+    (1..8).each do |i|
+      arr.push(@alphabetic_coords[i] => Square.new(color_in_odd_rank(i), Pawn.new(color_in_odd_rank(i), piece_color)))
+    end
+  end
+
+  def create_instances_of_white_pawns(arr, piece_color)
+    (1..8).each do |i|
+      arr.push(@alphabetic_coords[i] => Square.new(color_in_even_rank(i), Pawn.new(color_in_even_rank(i), piece_color)))
+    end
+  end
+
+  def create_instances_of_squares_in_even_rank(arr)
+    (1..8).each do |i|
+      arr.push(@alphabetic_coords[i] => Square.new(color_in_even_rank(i)))
+    end
+  end
+
+  def create_instances_of_squares_in_odd_ranks(arr)
+    (1..8).each do |i|
+      arr.push(@alphabetic_coords[i] => Square.new(color_in_odd_rank(i)))
+    end
+  end
+
+  def print_board_elements(board)
+    board.each do |key, arr|
       print "#{key} "
       arr.each do |elem|
         elem.each_value do |sqr|
-          print sqr.to_s
+          print sqr
         end
       end
       print " #{key}"
       puts ''
     end
-    print_alphabetic_coords
-    puts ''
-    puts ''
   end
 
   def print_alphabetic_coords
@@ -79,7 +105,7 @@ class Board # rubocop:disable Style/Documentation
     end
   end
 
-  def color_in_odd_rank(value)
+  def color_in_even_rank(value)
     if value.odd?
       :light_color
     elsif value.even?
@@ -87,7 +113,7 @@ class Board # rubocop:disable Style/Documentation
     end
   end
 
-  def color_in_even_rank(value)
+  def color_in_odd_rank(value)
     if value.odd?
       :brown
     elsif value.even?
