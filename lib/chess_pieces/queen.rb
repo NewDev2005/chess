@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
+require_relative '../color'
+
 class Queen # rubocop:disable Style/Documentation
-  def initialize(color, current_position)
-    @color = color
+  using Color
+  def initialize(bg_color, fg_color, current_position = nil)
+    @bg_color = bg_color
+    @fg_color = fg_color
+    @piece_unicode = "\u265B "
     @current_position = current_position
   end
 
@@ -17,6 +22,10 @@ class Queen # rubocop:disable Style/Documentation
       vertically_down: vertically_down(@current_position),
       vertically_up: vertically_up(@current_position)
     }
+  end
+
+  def to_s
+    @piece_unicode.bg_color(@bg_color).fg_color(@fg_color)
   end
 
   private

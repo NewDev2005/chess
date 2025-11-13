@@ -4,18 +4,15 @@ require_relative '../color'
 
 class Bishop # rubocop:disable Style/Documentation
   using Color
-  def initialize(color, current_position)
+  def initialize(bg_color, fg_color, current_position = nil)
     @piece_unicode = "\u265D "
-    @color = color
+    @bg_color = bg_color
+    @fg_color = fg_color
     @current_position = current_position
   end
 
   def to_s
-    if @color == :black
-      @piece_unicode.bg_color(@color).fg_color(@color)
-    elsif @color == :white
-      @piece_unicode.bg_color(@color).fg_color(@color)
-    end
+    @piece_unicode.bg_color(@bg_color).fg_color(@fg_color)
   end
 
   def movement

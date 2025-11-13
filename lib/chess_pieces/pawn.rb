@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
+require_relative '../color'
+
 class Pawn # rubocop:disable Style/Documentation
-  def initialize(color, current_position)
-    @color = color
+  using Color
+  def initialize(bg_color, fg_color, current_position = nil)
+    @bg_color = bg_color
+    @fg_color = fg_color
+    @piece_unicode = "\u265F "
     @current_position = current_position
     @possible_moves = []
   end
@@ -12,6 +17,10 @@ class Pawn # rubocop:disable Style/Documentation
       opening_move: initial_move(@current_position),
       regular_move: regular_move(@current_position)
     }
+  end
+
+  def to_s
+    @piece_unicode.bg_color(@bg_color).fg_color(@fg_color)
   end
 
   private

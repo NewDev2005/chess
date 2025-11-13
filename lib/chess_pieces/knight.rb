@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
+require_relative '../color'
+
 class Knight # rubocop:disable Style/Documentation
+  using Color
   attr_reader :possible_moves
 
-  def initialize(color, current_position)
-    @color = color
+  def initialize(bg_color, fg_color, current_position = nil)
+    @bg_color = bg_color
+    @fg_color = fg_color
+    @piece_unicode = "\u265E "
     @current_position = current_position
     @possible_moves = []
   end
@@ -12,6 +17,10 @@ class Knight # rubocop:disable Style/Documentation
   def movement
     get_possible_moves(@current_position)
     @possible_moves
+  end
+
+  def to_s
+    @piece_unicode.bg_color(@bg_color).fg_color(@fg_color)
   end
 
   private
