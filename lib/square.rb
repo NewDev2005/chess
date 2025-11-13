@@ -9,7 +9,6 @@ class Square # rubocop:disable Style/Documentation
   def initialize(color, piece = '  ')
     @color = color
     @piece = piece
-    @piece_color = piece_color
   end
 
   def to_s
