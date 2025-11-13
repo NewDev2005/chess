@@ -3,7 +3,7 @@
 require_relative 'color'
 require_relative 'chess_pieces_unicode'
 class Square # rubocop:disable Style/Documentation
-  attr_accessor :piece, :piece_color
+  attr_accessor :piece
 
   using Color
   def initialize(color, piece = '  ')
