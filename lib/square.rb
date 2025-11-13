@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require_relative 'color'
-require_relative 'chess_pieces'
+require_relative 'chess_pieces_unicode'
 class Square # rubocop:disable Style/Documentation
   attr_accessor :piece, :piece_color
 
   using Color
-  def initialize(color, piece = '  ', piece_color = nil)
+  def initialize(color, piece = '  ')
     @color = color
     @piece = piece
     @piece_color = piece_color
@@ -16,7 +16,7 @@ class Square # rubocop:disable Style/Documentation
     if @piece == '  '
       @piece.bg_color(@color)
     elsif @piece != '  '
-      @piece.bg_color(@color).fg_color(@piece_color)
+      @piece.to_s
     end
   end
 end
