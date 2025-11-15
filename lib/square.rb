@@ -15,6 +15,7 @@ class Square # rubocop:disable Style/Documentation
     if @piece == '  '
       @piece.bg_color(@color)
     elsif @piece != '  '
+      @piece.bg_color = @color
       @piece.to_s
     end
   end
