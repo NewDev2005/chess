@@ -5,9 +5,10 @@ require_relative '../color'
 class Knight # rubocop:disable Style/Documentation
   using Color
   attr_reader :possible_moves
+  attr_accessor :bg_color
 
-  def initialize(bg_color, fg_color, current_position = nil)
-    @bg_color = bg_color
+  def initialize(fg_color, current_position = nil)
+    @bg_color = nil
     @fg_color = fg_color
     @piece_unicode = "\u265E "
     @current_position = current_position

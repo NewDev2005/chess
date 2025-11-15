@@ -3,9 +3,11 @@
 require_relative '../color'
 
 class Queen # rubocop:disable Style/Documentation
+  attr_accessor :bg_color
+
   using Color
-  def initialize(bg_color, fg_color, current_position = nil)
-    @bg_color = bg_color
+  def initialize(fg_color, current_position = nil)
+    @bg_color = nil
     @fg_color = fg_color
     @piece_unicode = "\u265B "
     @current_position = current_position
