@@ -4,7 +4,8 @@ module Color # rubocop:disable Style/Documentation
   COLORS = { brown: '102;51;0',
              light_color: '255;178;102',
              white: '255;255;255',
-             black: '0;0;0' }.freeze
+             black: '0;0;0',
+             red: '255;0;0' }.freeze
 
   refine String do
     def bg_color(color)
