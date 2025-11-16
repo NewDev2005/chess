@@ -4,6 +4,7 @@ require_relative '../color'
 
 class Rook # rubocop:disable Style/Documentation
   attr_accessor :bg_color
+  attr_reader :current_position
 
   using Color
   def initialize(fg_color, current_position = nil)
@@ -24,6 +25,10 @@ class Rook # rubocop:disable Style/Documentation
       vertically_down: vertically_down(@current_position),
       vertically_up: vertically_up(@current_position)
     }
+  end
+
+  def update_current_position(position)
+    @current_position = position
   end
 
   private

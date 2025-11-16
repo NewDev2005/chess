@@ -4,6 +4,7 @@ require_relative '../color'
 
 class Pawn # rubocop:disable Style/Documentation
   attr_accessor :bg_color
+  attr_reader :current_position
 
   using Color
   def initialize(fg_color, current_position = nil)
@@ -23,6 +24,10 @@ class Pawn # rubocop:disable Style/Documentation
 
   def to_s
     @piece_unicode.bg_color(@bg_color).fg_color(@fg_color)
+  end
+
+  def update_current_position(position)
+    @current_position = position
   end
 
   private

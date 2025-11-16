@@ -6,6 +6,7 @@ class Knight # rubocop:disable Style/Documentation
   using Color
   attr_reader :possible_moves
   attr_accessor :bg_color
+  attr_reader :current_position
 
   def initialize(fg_color, current_position = nil)
     @bg_color = nil
@@ -22,6 +23,10 @@ class Knight # rubocop:disable Style/Documentation
 
   def to_s
     @piece_unicode.bg_color(@bg_color).fg_color(@fg_color)
+  end
+
+  def update_current_position(position)
+    @current_position = position
   end
 
   private

@@ -4,6 +4,7 @@ require_relative '../color'
 
 class Bishop # rubocop:disable Style/Documentation
   attr_accessor :bg_color
+  attr_reader :current_position
 
   using Color
   def initialize(fg_color, current_position = nil)
@@ -24,6 +25,10 @@ class Bishop # rubocop:disable Style/Documentation
       up_left_diagonal_moves: up_left_diagonal_moves(@current_position),
       down_left_diagonal_moves: down_left_diagonal_moves(@current_position)
     }
+  end
+
+  def update_current_position(position)
+    @current_position = position
   end
 
   private
