@@ -16,6 +16,11 @@ class Board # rubocop:disable Style/Documentation,Metrics/ClassLength
     @alphabetic_coords = %w[a b c d e f g h]
   end
 
+  def create_board
+    set_pieces
+    add_initial_position(@board)
+  end
+
   def set_pieces # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
     @board.each do |key, row|
       if key == '8'
@@ -88,6 +93,17 @@ class Board # rubocop:disable Style/Documentation,Metrics/ClassLength
     (0..7).each do |i|
       arr.push(@alphabetic_coords[i] => Square.new(color_in_odd_rank(num)))
       num += 1
+    end
+  end
+
+  def add_initial_position(board)
+    board.each do |rank_num, files|
+      files.each do |elem|
+        elem.each do |alphabetic_coord, sqr|
+          sqr.piece.update_current_position("#{alphabetic_coord}#{rank_num}") if sqr.piece != '  '
+          next
+        end
+      end
     end
   end
 
