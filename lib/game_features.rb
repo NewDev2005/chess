@@ -7,6 +7,8 @@ module GameFeatures # rubocop:disable Style/Documentation
     check_for_hash_and_arr(moves, board)
   end
 
+  private
+
   def get_valid_moves_of_piece(piece)
     piece.movement
   end
