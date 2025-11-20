@@ -12,9 +12,8 @@ module GameFeatures # rubocop:disable Style/Documentation
   end
 
   def check_for_hash_and_arr(moves, board)
-    if moves.is_a?(Hash)
-      traverse_all_the_moves_in_hash(moves, board)
-    end
+    traverse_all_the_moves_in_hash(moves, board) if moves.is_a?(Hash)
+    traverse_all_the_moves_in_arr(moves, board) if moves.is_a?(Array)
   end
 
   def traverse_all_the_moves_in_hash(hash, board)
@@ -24,6 +23,12 @@ module GameFeatures # rubocop:disable Style/Documentation
       arr.each do |move|
         traverse_the_board(board, move)
       end
+    end
+  end
+
+  def traverse_all_the_moves_in_arr(arr, board)
+    arr.each do |move|
+      traverse_the_board(board, move)
     end
   end
 
