@@ -9,11 +9,11 @@ require_relative 'game_features'
 class PlayGame # rubocop:disable Style/Documentation
   include GameInstruction
   include GameLogic
-  include GameFeatures
   def initialize(board = Board.new)
     @board = board
     @player1 = Player.new
     @player2 = Player.new
+    @game_features = GameFeatures.new
   end
 
   def prompt_players_name
@@ -48,9 +48,9 @@ class PlayGame # rubocop:disable Style/Documentation
 
   def select_piece(player)
     player.select_piece = player.prompt
-    mark_valid_moves_of_selected_piece(@board.board, player.select_piece, 'mark')
+    @game_features.mark_valid_moves_of_selected_piece(@board.board, player.select_piece)
     @board.display_board
-    unmark_the_valid_moves_of_selected_piece(@board.board, player.select_piece, 'unmark')
+    # unmark_the_valid_moves_of_selected_piece(@board.board, player.select_piece, 'unmark')
   end
 
   def game_loop
