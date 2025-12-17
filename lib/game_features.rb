@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
-  def initialiaze
+  def initialize
     @board = nil
     @coord = nil
     @piece_color = nil
