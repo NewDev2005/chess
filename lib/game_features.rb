@@ -5,7 +5,8 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
     @board = nil
     @coord = nil
     @piece_color = nil
-    @valid_moves = []
+    @marked_sqr = []
+    @captured_sqr = []
   end
 
   def mark_valid_moves_of_selected_piece(board, coord)
@@ -14,7 +15,10 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
     moves = extract_movements_of_piece(sqr.piece)
     @piece_color = sqr.piece.fg_color
     identify_valid_movements_of_piece(moves)
-    traverse_all_the_valid_moves
+  end
+
+  def unmark_the_marked_sqr
+    unmark_the_sqrs
   end
 
   private
@@ -42,29 +46,43 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
   end
 
   def iterate_through_all_moves_in_hash(hash)
+    @marked_sqr = []
     hash.each_value do |arr|
       next if arr.empty?
 
       arr.each do |move|
-        verify_move(move)
+        break if check_for_unoccupied_sqr?(get_the_sqr_obj(move)) == false
+
+        verify_move?(move)
+        check_for_captured_piece(move)
       end
     end
   end
 
   def iterate_through_all_moves_in_arr(arr)
-    return unless arr.empty?
+    @marked_sqr = []
+    return if arr.empty?
 
     arr.each do |coord|
-      verify_move(coord)
+      verify_move?(coord)
+      check_for_captured_piece(coord)
     end
   end
 
   def check_for_unoccupied_sqr?(sqr)
     if sqr.piece == '  '
       true
-    elsif sqr.piece != '  ' && sqr.piece != " \u2981"
+    elsif check_if_sqr_has_a_piece?(sqr)
       false
     end
+  end
+
+  def check_if_sqr_has_a_piece?(sqr)
+    pieces = [Bishop, King, Knight, Pawn, Queen, Rook]
+    pieces.each do |piece|
+      return true if sqr.piece.instance_of?(piece)
+    end
+    false
   end
 
   def check_for_color_difference?(piece)
@@ -75,23 +93,27 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
     end
   end
 
-  def check_for_captured_piece?(sqr)
-    if check_for_unoccupied_sqr?(sqr) == false && check_for_color_difference?(sqr.piece)
-      true
-    else
-      false
-    end
-  end
-
-  def verify_move(coord) # rubocop:disable Metrics/CyclomaticComplexity
+  def verify_move?(coord)
     @board.each do |rank_num, files|
       next unless rank_num == coord[1]
 
       files.each do |elem|
         elem.each do |alphabetic_coord, sqr|
-          p @valid_moves
-          @valid_moves.push(coord) if alphabetic_coord == coord[0] && check_for_unoccupied_sqr?(sqr)
-          @valid_moves.push(coord) if alphabetic_coord == coord[0] && check_for_captured_piece?(sqr)
+          mark_the_empty_sqr_with_dot(sqr) if alphabetic_coord == coord[0] && check_for_unoccupied_sqr?(sqr)
+        end
+      end
+    end
+  end
+
+  def check_for_captured_piece(coord)
+    @board.each do |rank_num, files|
+      next unless rank_num == coord[1]
+
+      files.each do |elem|
+        elem.each do |alphabetic_coord, sqr|
+          if alphabetic_coord == coord[0] && check_for_unoccupied_sqr?(sqr) == false
+            highlight_captured_piece(sqr) if check_for_color_difference?(sqr.piece)
+          end
         end
       end
     end
@@ -99,17 +121,17 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
 
   def mark_the_empty_sqr_with_dot(sqr)
     sqr.piece = " \u2981"
+    @marked_sqr.push(sqr)
   end
 
-  def highlight_the_piece_being_captured(sqr)
+  def highlight_captured_piece(sqr)
     sqr.color = :red
+    @captured_sqr.push(sqr)
   end
 
-  def traverse_all_the_valid_moves
-    @valid_moves.each do |coord|
-      sqr_obj = get_the_sqr_obj(coord)
-      mark_the_empty_sqr_with_dot(sqr_obj) if sqr_obj.piece == '  '
-      highlight_the_piece_being_captured(sqr_obj) if sqr_obj.piece != '  '
+  def unmark_the_sqrs
+    @marked_sqr.each do |sqr|
+      sqr.piece = '  '
     end
   end
 
