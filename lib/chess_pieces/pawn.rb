@@ -4,7 +4,7 @@ require_relative '../color'
 
 class Pawn # rubocop:disable Style/Documentation
   attr_accessor :bg_color
-  attr_reader :current_position
+  attr_reader :current_position, :fg_color
 
   using Color
   def initialize(fg_color, current_position = nil)
@@ -18,7 +18,8 @@ class Pawn # rubocop:disable Style/Documentation
   def movement
     {
       opening_move: initial_move(@current_position),
-      regular_move: regular_move(@current_position)
+      regular_move: regular_move(@current_position),
+      capture_move: capture_move(@current_position)
     }
   end
 
@@ -34,23 +35,38 @@ class Pawn # rubocop:disable Style/Documentation
 
   def initial_move(current_position)
     @possible_moves = []
-    if @color == :white
-      return unless current_position.end_with?('2') || current_position.end_with?('7')
+    if @fg_color == :white
+      @possible_moves.push("#{current_position[0]}#{current_position[1].to_i + 2}") if current_position.end_with?('2')
+    elsif @fg_color == :black
+      @possible_moves.push("#{current_position[0]}#{current_position[1].to_i - 2}") if current_position.end_with?('7')
 
-      @possible_moves.push("#{current_position[0]}#{current_position[1].to_i + 2}")
-    elsif @color == :black
-      return unless current_position.end_with?('7') || current_position.end_with?('2')
-
-      @possible_moves.push("#{current_position[0]}#{current_position[1].to_i - 2}")
     end
+
+    @possible_moves
   end
 
   def regular_move(current_position)
     @possible_moves = []
-    if @color == :white
+    if @fg_color == :white
       @possible_moves.push("#{current_position[0]}#{current_position[1].to_i + 1}")
-    elsif @color == :black
+    elsif @fg_color == :black
       @possible_moves.push("#{current_position[0]}#{current_position[1].to_i - 1}")
+    end
+    @possible_moves
+  end
+
+  def capture_move(current_position) # rubocop:disable Metrics/AbcSize
+    @possible_moves = []
+    if @fg_color == :white
+      @possible_moves.push("#{(current_position[0].ord + 1).chr}#{current_position[1].to_i + 1}")
+      @possible_moves.push("#{(current_position[0].ord - 1).chr}#{current_position[1].to_i + 1}")
+    elsif @fg_color == :black
+      @possible_moves.push("#{(current_position[0].ord + 1).chr}#{current_position[1].to_i - 1}")
+      @possible_moves.push("#{(current_position[0].ord - 1).chr}#{current_position[1].to_i - 1}")
     end
   end
 end
+
+# pawn = Pawn.new(:white, 'd4')
+
+# p pawn.movement
