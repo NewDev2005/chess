@@ -10,15 +10,21 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
   end
 
   def mark_valid_moves_of_selected_piece(board, coord)
+    @captured_sqr = []
+    @marked_sqr = []
     set_the_state(board, coord)
     sqr = get_the_sqr_obj(coord)
     moves = extract_movements_of_piece(sqr.piece)
     @piece_color = sqr.piece.fg_color
+    for_pawn(moves) if check_for_pawn?(sqr.piece)
+    return if check_for_pawn?(sqr.piece)
+
     identify_valid_movements_of_piece(moves)
   end
 
   def unmark_the_marked_sqr
     unmark_the_sqrs
+    unhighlight_captured_piece
   end
 
   private
@@ -46,21 +52,21 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
   end
 
   def iterate_through_all_moves_in_hash(hash)
-    @marked_sqr = []
+    # @marked_sqr = []
     hash.each_value do |arr|
       next if arr.empty?
 
       arr.each do |move|
+        check_for_captured_piece(move)
         break if check_for_unoccupied_sqr?(get_the_sqr_obj(move)) == false
 
         verify_move?(move)
-        check_for_captured_piece(move)
       end
     end
   end
 
   def iterate_through_all_moves_in_arr(arr)
-    @marked_sqr = []
+    # @marked_sqr = []
     return if arr.empty?
 
     arr.each do |coord|
@@ -125,8 +131,16 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
   end
 
   def highlight_captured_piece(sqr)
+    @captured_sqr.push({ sqr.color => sqr })
     sqr.color = :red
-    @captured_sqr.push(sqr)
+  end
+
+  def unhighlight_captured_piece
+    @captured_sqr.each do |hash|
+      hash.each do |original_color, sqr|
+        sqr.color = original_color
+      end
+    end
   end
 
   def unmark_the_sqrs
@@ -143,6 +157,27 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
         elem.each do |alphabetic_coord, sqr|
           return sqr if alphabetic_coord == coord[0]
         end
+      end
+    end
+  end
+
+  def check_for_pawn?(piece)
+    return unless piece.instance_of?(Pawn)
+
+    true
+  end
+
+  def for_pawn(moves) # rubocop:disable Metrics/MethodLength
+    moves.each do |key, arr|
+      if %i[opening_move regular_move].include?(key)
+        arr.each do |coord|
+          verify_move?(coord)
+        end
+      end
+      next unless key == :capture_move
+
+      arr.each do |coord|
+        check_for_captured_piece(coord)
       end
     end
   end
