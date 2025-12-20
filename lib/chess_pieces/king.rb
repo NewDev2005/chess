@@ -4,7 +4,7 @@ require_relative '../color'
 
 class King # rubocop:disable Style/Documentation
   attr_accessor :bg_color
-  attr_reader :current_position
+  attr_reader :current_position, :fg_color
 
   using Color
   def initialize(fg_color, current_position = nil)
