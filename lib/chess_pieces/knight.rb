@@ -5,8 +5,8 @@ require_relative '../color'
 class Knight # rubocop:disable Style/Documentation
   using Color
   attr_reader :possible_moves
-  attr_accessor :bg_color
-  attr_reader :current_position
+  attr_accessor :bg_color, :current_position
+  attr_reader :fg_color
 
   def initialize(fg_color, current_position = nil)
     @bg_color = nil
@@ -42,6 +42,7 @@ class Knight # rubocop:disable Style/Documentation
   end
 
   def get_possible_moves(current_position)
+    @possible_moves = []
     double_increment(current_position, 2, 1)
     double_increment(current_position, 1, 2)
     decrement_increment(current_position, 1, 2)
@@ -76,3 +77,9 @@ class Knight # rubocop:disable Style/Documentation
     @possible_moves.push("#{(move[0].ord - num1).chr}#{move[1].to_i - num2}")
   end
 end
+
+
+# knight = Knight.new(:brown, 'b1')
+# p knight.movement
+# knight.current_position = 'a3'
+# p knight.movement
