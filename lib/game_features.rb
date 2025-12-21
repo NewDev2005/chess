@@ -1,17 +1,21 @@
 # frozen_string_literal: true
 
 class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
+  attr_reader :valid_moves
+
   def initialize
     @board = nil
     @coord = nil
     @piece_color = nil
     @marked_sqr = []
     @captured_sqr = []
+    @valid_moves = []
   end
 
   def mark_valid_moves_of_selected_piece(board, coord)
     @captured_sqr = []
     @marked_sqr = []
+    @valid_moves = []
     set_the_state(board, coord)
     sqr = get_the_sqr_obj(coord)
     moves = extract_movements_of_piece(sqr.piece)
@@ -105,7 +109,7 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
 
       files.each do |elem|
         elem.each do |alphabetic_coord, sqr|
-          mark_the_empty_sqr_with_dot(sqr) if alphabetic_coord == coord[0] && check_for_unoccupied_sqr?(sqr)
+          mark_the_empty_sqr_with_dot(sqr, coord) if alphabetic_coord == coord[0] && check_for_unoccupied_sqr?(sqr)
         end
       end
     end
@@ -118,21 +122,23 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
       files.each do |elem|
         elem.each do |alphabetic_coord, sqr|
           if alphabetic_coord == coord[0] && check_for_unoccupied_sqr?(sqr) == false
-            highlight_captured_piece(sqr) if check_for_color_difference?(sqr.piece)
+            highlight_captured_piece(sqr, coord) if check_for_color_difference?(sqr.piece)
           end
         end
       end
     end
   end
 
-  def mark_the_empty_sqr_with_dot(sqr)
+  def mark_the_empty_sqr_with_dot(sqr, coord)
     sqr.piece = " \u2981"
     @marked_sqr.push(sqr)
+    @valid_moves.push(coord)
   end
 
-  def highlight_captured_piece(sqr)
+  def highlight_captured_piece(sqr, coord)
     @captured_sqr.push({ sqr.color => sqr })
     sqr.color = :red
+    @valid_moves.push(coord)
   end
 
   def unhighlight_captured_piece
