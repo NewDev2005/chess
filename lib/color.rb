@@ -5,7 +5,9 @@ module Color # rubocop:disable Style/Documentation
              light_color: '255;178;102',
              white: '255;255;255',
              black: '0;0;0',
-             yellow: '204;204;0',
+             yellow: '255;255;0',
+             green: '0;255;0',
+             blue: '0;204;204',
              red: '255;0;0' }.freeze
 
   refine String do
