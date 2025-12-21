@@ -13,9 +13,7 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
   end
 
   def mark_valid_moves_of_selected_piece(board, coord)
-    @captured_sqr = []
-    @marked_sqr = []
-    @valid_moves = []
+    reset_the_state_for_instance_variables
     set_the_state(board, coord)
     sqr = get_the_sqr_obj(coord)
     moves = extract_movements_of_piece(sqr.piece)
@@ -36,6 +34,12 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
   def set_the_state(board, coord)
     @board = board
     @coord = coord
+  end
+
+  def reset_the_state_for_instance_variables
+    @captured_sqr = []
+    @marked_sqr = []
+    @valid_moves = []
   end
 
   def extract_movements_of_piece(piece)
