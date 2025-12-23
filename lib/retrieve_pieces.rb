@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-module PieceRetrieval # rubocop:disable Style/Documentation
+# #retrieves_pieces returns all the pieces of a specific color either white or black
+module PieceRetrieval
   def retrieve_pieces(board, color)
     pieces = []
     board.each_value do |files|
