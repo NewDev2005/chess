@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require_relative '../color'
+require_relative 'legal_moves'
 
 class Pawn # rubocop:disable Style/Documentation
+  include LegalMoves
   attr_accessor :bg_color
   attr_reader :current_position, :fg_color
 
@@ -13,6 +15,7 @@ class Pawn # rubocop:disable Style/Documentation
     @piece_unicode = "\u265F "
     @current_position = current_position
     @possible_moves = []
+    @legal_moves = []
   end
 
   def movement
@@ -29,6 +32,20 @@ class Pawn # rubocop:disable Style/Documentation
 
   def update_current_position(position)
     @current_position = position
+  end
+
+  def get_legal_moves(board)
+    @legal_moves = []
+    movement.each_value do |arr|
+      next if arr.empty?
+
+      arr.each do |coord|
+        move = verify_legal_moves(board, coord, @fg_color)
+        @legal_moves.push(move) if move.nil? == false
+        break if sqr_is_occupied?(board, coord)
+      end
+    end
+    @legal_moves
   end
 
   private
