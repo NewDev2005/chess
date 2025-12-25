@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require_relative '../color'
+require_relative 'legal_moves'
 
 class Knight # rubocop:disable Style/Documentation
+  include LegalMoves
   using Color
   attr_reader :possible_moves
   attr_accessor :bg_color, :current_position
@@ -14,6 +16,7 @@ class Knight # rubocop:disable Style/Documentation
     @piece_unicode = "\u265E "
     @current_position = current_position
     @possible_moves = []
+    @legal_moves = []
   end
 
   def movement
@@ -27,6 +30,18 @@ class Knight # rubocop:disable Style/Documentation
 
   def update_current_position(position)
     @current_position = position
+  end
+
+  def get_legal_moves(board)
+    @legal_moves = []
+    knight_movement = movement
+    return if knight_movement.empty?
+
+    knight_movement.each do |coord|
+      move = verify_legal_moves(board, coord, @fg_color)
+      @legal_moves.push(move) if move.nil? == false
+    end
+    @legal_moves
   end
 
   private

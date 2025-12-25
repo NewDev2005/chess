@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require_relative '../color'
+require_relative 'legal_moves'
 
 class Bishop # rubocop:disable Style/Documentation
+  include LegalMoves
   attr_accessor :bg_color
   attr_reader :current_position, :fg_color
 
@@ -12,6 +14,7 @@ class Bishop # rubocop:disable Style/Documentation
     @bg_color = nil
     @fg_color = fg_color
     @current_position = current_position
+    @legal_moves = []
   end
 
   def to_s
@@ -25,6 +28,20 @@ class Bishop # rubocop:disable Style/Documentation
       up_left_diagonal_moves: up_left_diagonal_moves(@current_position),
       down_left_diagonal_moves: down_left_diagonal_moves(@current_position)
     }
+  end
+
+  def get_legal_moves(board)
+    @legal_moves = []
+    movement.each_value do |arr|
+      next if arr.empty?
+
+      arr.each do |coord|
+        move = verify_legal_moves(board, coord, @fg_color)
+        @legal_moves.push(move) if move.nil? == false
+        break if sqr_is_occupied?(board, coord)
+      end
+    end
+    @legal_moves
   end
 
   def update_current_position(position)
@@ -77,6 +94,3 @@ class Bishop # rubocop:disable Style/Documentation
     possible_moves
   end
 end
-
-# bishop = Bishop.new(:black, 'c1')
-# p bishop.movement
