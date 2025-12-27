@@ -14,7 +14,6 @@ class Pawn # rubocop:disable Style/Documentation
     @fg_color = fg_color
     @piece_unicode = "\u265F "
     @current_position = current_position
-    @possible_moves = []
     @legal_moves = []
   end
 
@@ -51,39 +50,58 @@ class Pawn # rubocop:disable Style/Documentation
   private
 
   def initial_move(current_position)
-    @possible_moves = []
+    possible_moves = []
     if @fg_color == :white
-      @possible_moves.push("#{current_position[0]}#{current_position[1].to_i + 2}") if current_position.end_with?('2')
+      possible_moves.push("#{current_position[0]}#{current_position[1].to_i + 2}") if current_position.end_with?('2')
     elsif @fg_color == :black
-      @possible_moves.push("#{current_position[0]}#{current_position[1].to_i - 2}") if current_position.end_with?('7')
+      possible_moves.push("#{current_position[0]}#{current_position[1].to_i - 2}") if current_position.end_with?('7')
 
     end
 
-    @possible_moves
+    verify_valid_coord(possible_moves)
   end
 
   def regular_move(current_position)
-    @possible_moves = []
+    possible_moves = []
     if @fg_color == :white
-      @possible_moves.push("#{current_position[0]}#{current_position[1].to_i + 1}")
+      possible_moves.push("#{current_position[0]}#{current_position[1].to_i + 1}")
     elsif @fg_color == :black
-      @possible_moves.push("#{current_position[0]}#{current_position[1].to_i - 1}")
+      possible_moves.push("#{current_position[0]}#{current_position[1].to_i - 1}")
     end
-    @possible_moves
+    verify_valid_coord(possible_moves)
   end
 
   def capture_move(current_position) # rubocop:disable Metrics/AbcSize
-    @possible_moves = []
+    possible_moves = []
     if @fg_color == :white
-      @possible_moves.push("#{(current_position[0].ord + 1).chr}#{current_position[1].to_i + 1}")
-      @possible_moves.push("#{(current_position[0].ord - 1).chr}#{current_position[1].to_i + 1}")
+      possible_moves.push("#{(current_position[0].ord + 1).chr}#{current_position[1].to_i + 1}")
+      possible_moves.push("#{(current_position[0].ord - 1).chr}#{current_position[1].to_i + 1}")
     elsif @fg_color == :black
-      @possible_moves.push("#{(current_position[0].ord + 1).chr}#{current_position[1].to_i - 1}")
-      @possible_moves.push("#{(current_position[0].ord - 1).chr}#{current_position[1].to_i - 1}")
+      possible_moves.push("#{(current_position[0].ord + 1).chr}#{current_position[1].to_i - 1}")
+      possible_moves.push("#{(current_position[0].ord - 1).chr}#{current_position[1].to_i - 1}")
     end
+    verify_valid_coord(possible_moves)
+  end
+
+  def valid_coord?(move)
+    return if move.length > 2
+
+    if move[0].ord >= 97 && move[0].ord <= 104 && move[1].to_i >= 1 && move[1].to_i <= 8
+      true
+    else
+      false
+    end
+  end
+
+  def verify_valid_coord(arr)
+    valid_coords = []
+    arr.each do |coord|
+      valid_coords.push(coord) if valid_coord?(coord)
+    end
+    valid_coords
   end
 end
 
-# pawn = Pawn.new(:white, 'd4')
+# pawn = Pawn.new(:white, 'c8')
 
 # p pawn.movement
