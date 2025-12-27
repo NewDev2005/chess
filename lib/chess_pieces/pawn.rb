@@ -57,7 +57,6 @@ class Pawn # rubocop:disable Style/Documentation
       possible_moves.push("#{current_position[0]}#{current_position[1].to_i - 2}") if current_position.end_with?('7')
 
     end
-
     verify_valid_coord(possible_moves)
   end
 
