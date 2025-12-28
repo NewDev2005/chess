@@ -23,22 +23,24 @@ class Bishop # rubocop:disable Style/Documentation
 
   def movement
     {
-      up_right_diagonal_moves: up_right_diagonal_moves(@current_position),
-      down_right_diagonal_moves: down_right_diagonal_moves(@current_position),
-      up_left_diagonal_moves: up_left_diagonal_moves(@current_position),
-      down_left_diagonal_moves: down_left_diagonal_moves(@current_position)
+      top_right_diagonal_moves: top_right_diagonal_moves(@current_position),
+      bottom_right_diagonal_moves: bottom_right_diagonal_moves(@current_position),
+      top_left_diagonal_moves: top_left_diagonal_moves(@current_position),
+      bottom_left_diagonal_moves: bottom_left_diagonal_moves(@current_position)
     }
   end
 
-  def get_legal_moves(board)
+  def get_legal_moves(board) # rubocop:disable Metrics/MethodLength
     @legal_moves = []
     movement.each_value do |arr|
       next if arr.empty?
 
       arr.each do |coord|
+        break if sqr_is_occupied?(board, coord, @fg_color)
+
         move = verify_legal_moves(board, coord, @fg_color)
         @legal_moves.push(move) if move.nil? == false
-        break if sqr_is_occupied?(board, coord)
+        break if sqr_is_occupied_by_enemy?(board, coord, @fg_color)
       end
     end
     @legal_moves
@@ -50,7 +52,7 @@ class Bishop # rubocop:disable Style/Documentation
 
   private
 
-  def up_right_diagonal_moves(current_position)
+  def top_right_diagonal_moves(current_position)
     possible_moves = []
     loop do
       break if current_position.end_with?('8') || current_position.start_with?('h')
@@ -61,7 +63,7 @@ class Bishop # rubocop:disable Style/Documentation
     possible_moves
   end
 
-  def down_right_diagonal_moves(current_position)
+  def bottom_right_diagonal_moves(current_position)
     possible_moves = []
     loop do
       break if current_position.end_with?('1') || current_position.start_with?('h')
@@ -72,7 +74,7 @@ class Bishop # rubocop:disable Style/Documentation
     possible_moves
   end
 
-  def up_left_diagonal_moves(current_position)
+  def top_left_diagonal_moves(current_position)
     possible_moves = []
     loop do
       break if current_position.end_with?('8') || current_position.start_with?('a')
@@ -83,7 +85,7 @@ class Bishop # rubocop:disable Style/Documentation
     possible_moves
   end
 
-  def down_left_diagonal_moves(current_position)
+  def bottom_left_diagonal_moves(current_position)
     possible_moves = []
     loop do
       break if current_position.end_with?('1') || current_position.start_with?('a')
