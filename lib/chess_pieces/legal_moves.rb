@@ -3,7 +3,7 @@
 # retrieves the legal moves for a piece
 
 module LegalMoves # rubocop:disable Style/Documentation
-  def verify_legal_moves(board, coord, color)
+  def verify_legal_moves(board, coord, color) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
     legal_move = nil
     board.each do |rank, files|
       next unless rank == coord[1]
@@ -12,7 +12,7 @@ module LegalMoves # rubocop:disable Style/Documentation
         elem.each do |alphabetic_coord, sqr|
           legal_move = coord if alphabetic_coord == coord[0] && sqr.piece == '  '
 
-          legal_move = coord if alphabetic_coord == coord[0] && sqr.piece != '  ' && sqr.piece.fg_color != color
+          legal_move = coord if alphabetic_coord == coord[0] && sqr_is_occupied_by_enemy?(board, coord, color)
         end
       end
     end
@@ -31,9 +31,16 @@ module LegalMoves # rubocop:disable Style/Documentation
     end
   end
 
-  def sqr_is_occupied?(board, coord)
+  def sqr_is_occupied?(board, coord, color)
     sqr = get_the_sqr_obj(board, coord)
-    return true if sqr.piece != '  '
+    return true if sqr.piece != '  ' && sqr.piece.fg_color == color
+
+    false
+  end
+
+  def sqr_is_occupied_by_enemy?(board, coord, color)
+    sqr = get_the_sqr_obj(board, coord)
+    return true if sqr.piece != '  ' && sqr.piece.fg_color != color
 
     false
   end
