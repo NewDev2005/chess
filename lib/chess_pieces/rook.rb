@@ -34,15 +34,17 @@ class Rook # rubocop:disable Style/Documentation
     @current_position = position
   end
 
-  def get_legal_moves(board)
+  def get_legal_moves(board) # rubocop:disable Metrics/MethodLength
     @legal_moves = []
     movement.each_value do |arr|
       next if arr.empty?
 
       arr.each do |coord|
+        break if sqr_is_occupied?(board, coord, @fg_color)
+
         move = verify_legal_moves(board, coord, @fg_color)
         @legal_moves.push(move) if move.nil? == false
-        break if sqr_is_occupied?(board, coord)
+        break if sqr_is_occupied_by_enemy?(board, coord, @fg_color)
       end
     end
     @legal_moves
