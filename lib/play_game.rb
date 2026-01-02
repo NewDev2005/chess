@@ -5,23 +5,34 @@ require_relative 'player'
 require_relative 'instruction'
 require_relative 'game_logic'
 require_relative 'game_features'
+require_relative 'check'
 
 class PlayGame # rubocop:disable Style/Documentation
   include GameInstruction
   include GameLogic
   def initialize(board = Board.new)
     @board = board
-    @player1 = Player.new
-    @player2 = Player.new
+    @player1 = Player.new(@board.board)
+    @player2 = Player.new(@board.board)
     @game_features = GameFeatures.new
+    @check = Check.new(@board.board)
   end
+
+  def start
+    assign_color_of_the_pieces_to_players_randomly
+    @board.create_board
+    @board.display_board
+    game_loop
+  end
+
+  private
 
   def prompt_players_name
     player_names = []
     enter_name_message('player1')
-    player_names.push(@player1.prompt)
+    player_names.push(gets.chomp)
     enter_name_message('player2')
-    player_names.push(@player2.prompt)
+    player_names.push(gets.chomp)
     player_names
   end
 
@@ -46,39 +57,15 @@ class PlayGame # rubocop:disable Style/Documentation
   end
 
   def select_piece(player)
-    player.select_piece = player.prompt
-    verify_player_color_pick(player)
+    player.prompt_player_to_select_piece
     @game_features.mark_valid_moves_of_selected_piece(@board.board, player.select_piece)
     @board.display_board
     @game_features.unmark_the_marked_sqr
+    @game_features.print_legal_moves(@board.board, player.select_piece)
   end
 
   def select_sqr_to_place_move(player)
-    player.select_sqr_to_place = player.prompt
-    check_for_legal_move(player)
-  end
-
-  def check_for_legal_move(player)
-    until accurate_move?(player.select_sqr_to_place)
-      invalid_move_for_piece_message(player.select_sqr_to_place)
-      player.select_sqr_to_place = player.prompt
-    end
-  end
-
-  def accurate_move?(move)
-    @game_features.valid_moves.include?(move)
-  end
-
-  def verify_player_color_pick(player)
-    until accurate_color_selection?(player)
-      puts 'Choose your own piece XD'
-      player.select_piece = player.prompt
-    end
-  end
-
-  def accurate_color_selection?(player_obj)
-    piece_color = get_piece_color(player_obj.select_piece)
-    piece_color == player_obj.color_pick
+    player.prompt_player_to_select_sqr
   end
 
   def get_piece_color(coord)
@@ -98,12 +85,5 @@ class PlayGame # rubocop:disable Style/Documentation
       register_move(@player1)
       register_move(@player2)
     end
-  end
-
-  def start
-    assign_color_of_the_pieces_to_players_randomly
-    @board.create_board
-    @board.display_board
-    game_loop
   end
 end
