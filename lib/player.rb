@@ -15,7 +15,7 @@ class Player # rubocop:disable Style/Documentation
   end
 
   def prompt_player_to_select_piece
-    @select_piece = verify_player_color_pick(verify_input(gets.chomp))
+    @select_piece = verify_player_color_pick(check_empty_sqr(verify_input(gets.chomp)))
     check_piece_has_legal_moves
   end
 
@@ -85,8 +85,8 @@ class Player # rubocop:disable Style/Documentation
 
   def invalid_coord(coord)
     until valid_move?(coord)
-      invalid_input_message(coord, 'coordinate')
-      coord = gets.chomp
+      invalid_user_input_message
+      coord = invalid_input(gets.chomp)
     end
     coord
   end
@@ -105,5 +105,20 @@ class Player # rubocop:disable Style/Documentation
     else
       false
     end
+  end
+
+  def non_empty_sqr?(coord)
+    sqr = get_the_sqr_obj(coord)
+    return true if sqr.piece != '  '
+
+    false
+  end
+
+  def check_empty_sqr(coord)
+    until non_empty_sqr?(coord)
+      empty_sqr_message
+      coord = verify_input(gets.chomp)
+    end
+    coord
   end
 end
