@@ -44,4 +44,11 @@ module LegalMoves # rubocop:disable Style/Documentation
 
     false
   end
+
+  def next_sqr_is_blocked?(board, coord)
+    sqr = get_the_sqr_obj(board, coord)
+    return true if sqr.piece != '  '
+
+    false
+  end
 end
