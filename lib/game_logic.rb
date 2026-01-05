@@ -32,7 +32,7 @@ module GameLogic # rubocop:disable Style/Documentation
         next unless alphabetic_coord == destination[0]
 
         sqr.piece = sqr_propertities[0]
-        sqr.piece.update_current_position(destination)
+        sqr.piece.update_current_position(destination) if sqr.piece != '  '
       end
     end
   end
