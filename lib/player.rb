@@ -4,7 +4,8 @@ require_relative 'instruction'
 
 class Player # rubocop:disable Style/Documentation
   include GameInstruction
-  attr_accessor :name, :color_pick, :select_piece, :select_sqr_to_place
+  attr_accessor :name, :color_pick
+  attr_reader :select_piece, :select_sqr_to_place
 
   def initialize(board)
     @name = nil
@@ -21,6 +22,8 @@ class Player # rubocop:disable Style/Documentation
 
   def prompt_player_to_select_sqr
     @select_sqr_to_place = gets.chomp
+    return if @select_sqr_to_place == 'back'
+
     check_for_accurate_move
   end
 
