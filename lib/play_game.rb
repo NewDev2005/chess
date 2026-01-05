@@ -48,7 +48,6 @@ class PlayGame # rubocop:disable Style/Documentation
   end
 
   def register_move(player_obj)
-    choose_piece_message(player_obj)
     select_piece(player_obj)
     select_sqr_to_move_instruction
     select_sqr_to_place_move(player_obj)
@@ -57,6 +56,7 @@ class PlayGame # rubocop:disable Style/Documentation
   end
 
   def select_piece(player)
+    choose_piece_message(player)
     player.prompt_player_to_select_piece
     @game_features.mark_valid_moves_of_selected_piece(@board.board, player.select_piece)
     @board.display_board
@@ -66,6 +66,11 @@ class PlayGame # rubocop:disable Style/Documentation
 
   def select_sqr_to_place_move(player)
     player.prompt_player_to_select_sqr
+    until player.select_sqr_to_place != 'back'
+      select_piece(player)
+      select_sqr_to_move_instruction
+      player.prompt_player_to_select_sqr
+    end
   end
 
   def get_piece_color(coord)
