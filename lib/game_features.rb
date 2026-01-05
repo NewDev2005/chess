@@ -29,6 +29,12 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
     unhighlight_captured_piece
   end
 
+  def print_legal_moves(board, coord)
+    piece = get_the_sqr_obj(coord).piece
+    moves = piece.get_legal_moves(board)
+    p moves
+  end
+
   private
 
   def set_the_state(board, coord)
@@ -60,7 +66,6 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
   end
 
   def iterate_through_all_moves_in_hash(hash)
-    # @marked_sqr = []
     hash.each_value do |arr|
       next if arr.empty?
 
@@ -74,7 +79,6 @@ class GameFeatures # rubocop:disable Style/Documentation,Metrics/ClassLength
   end
 
   def iterate_through_all_moves_in_arr(arr)
-    # @marked_sqr = []
     return if arr.empty?
 
     arr.each do |coord|
