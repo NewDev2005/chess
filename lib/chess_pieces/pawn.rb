@@ -35,14 +35,14 @@ class Pawn # rubocop:disable Style/Documentation
 
   def get_legal_moves(board)
     @legal_moves = []
-    movement.each_value do |arr|
+    movement.each do |key, arr|
       next if arr.empty?
 
-      arr.each do |coord|
-        move = verify_legal_moves(board, coord, @fg_color)
-        @legal_moves.push(move) if move.nil? == false
-        break if sqr_is_occupied?(board, coord)
+      if key == :capture_move
+        push_legal_capture_move(board, arr)
+        break
       end
+      push_legal_move(board, arr)
     end
     @legal_moves
   end
@@ -98,6 +98,22 @@ class Pawn # rubocop:disable Style/Documentation
       valid_coords.push(coord) if valid_coord?(coord)
     end
     valid_coords
+  end
+
+  def push_legal_capture_move(board, arr)
+    arr.each do |coord|
+      sqr = get_the_sqr_obj(board, coord)
+      @legal_moves.push(sqr.piece.current_position) if sqr.piece != '  ' && sqr.piece.fg_color != fg_color
+    end
+  end
+
+  def push_legal_move(board, list)
+    list.each do |coord|
+      break if next_sqr_is_blocked?(board, coord)
+
+      move = verify_legal_moves(board, coord, @fg_color)
+      @legal_moves.push(move) if move.nil? == false
+    end
   end
 end
 
