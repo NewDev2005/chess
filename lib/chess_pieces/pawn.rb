@@ -35,14 +35,13 @@ class Pawn # rubocop:disable Style/Documentation
 
   def get_legal_moves(board)
     @legal_moves = []
-    movement.each do |key, arr|
+    pawn_movement = movement
+    pawn_movement.each do |key, arr|
       next if arr.empty?
 
-      if key == :capture_move
-        push_legal_capture_move(board, arr)
-        break
-      end
-      push_legal_move(board, arr)
+      push_legal_capture_move(board, arr) if key == :capture_move
+      check_opening_move(board, pawn_movement[:opening_move], pawn_movement[:regular_move]) if key == :opening_move
+      push_legal_move(board, arr) if key == :regular_move
     end
     @legal_moves
   end
@@ -114,6 +113,13 @@ class Pawn # rubocop:disable Style/Documentation
       move = verify_legal_moves(board, coord, @fg_color)
       @legal_moves.push(move) if move.nil? == false
     end
+  end
+
+  def check_opening_move(board, opening_move, regular_move)
+    regular_move_sqr = get_the_sqr_obj(board, regular_move[0])
+    return if regular_move_sqr.piece != '  '
+
+    push_legal_move(board, opening_move)
   end
 end
 
