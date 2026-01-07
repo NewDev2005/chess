@@ -12,10 +12,10 @@ class PlayGame # rubocop:disable Style/Documentation
   include GameLogic
   def initialize(board = Board.new)
     @board = board
-    @player1 = Player.new(@board.board)
-    @player2 = Player.new(@board.board)
+    @player1 = Player.new(board)
+    @player2 = Player.new(board)
     @game_features = GameFeatures.new
-    @check = Check.new(@board.board)
+    @check = Check.new(board)
   end
 
   def start
