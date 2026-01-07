@@ -12,7 +12,7 @@ class Player # rubocop:disable Style/Documentation
     @color_pick = nil
     @select_piece = nil
     @select_sqr_to_place = nil
-    @board = board
+    @board = board.board
   end
 
   def prompt_player_to_select_piece
