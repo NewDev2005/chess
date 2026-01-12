@@ -46,6 +46,16 @@ class Pawn # rubocop:disable Style/Documentation
     @legal_moves
   end
 
+  def legal_capture_move(board)
+    @legal_moves = []
+    movement.each do |key, arr|
+      next if arr.empty? && key != :capture_move
+
+      push_legal_capture_move(board, arr)
+    end
+    @legal_moves
+  end
+
   private
 
   def initial_move(current_position)
