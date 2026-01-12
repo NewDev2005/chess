@@ -21,6 +21,17 @@ class Board # rubocop:disable Style/Documentation,Metrics/ClassLength
     add_initial_position(@board)
   end
 
+  def display_board
+    print_alphabetic_coords
+    puts ''
+    print_board_elements(@board)
+    print_alphabetic_coords
+    puts ''
+    puts ''
+  end
+
+  private
+
   def set_pieces # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
     @board.each do |key, row|
       if key == '8'
@@ -40,17 +51,6 @@ class Board # rubocop:disable Style/Documentation,Metrics/ClassLength
       end
     end
   end
-
-  def display_board
-    print_alphabetic_coords
-    puts ''
-    print_board_elements(@board)
-    print_alphabetic_coords
-    puts ''
-    puts ''
-  end
-
-  private
 
   def create_instances_of_pieces(arr, sqr_color1, sqr_color2, piece_color) # rubocop:disable Metrics/AbcSize
     arr.push('a' => Square.new(sqr_color1, Rook.new(piece_color)))
