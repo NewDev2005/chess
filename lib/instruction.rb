@@ -60,6 +60,14 @@ module GameInstruction # rubocop:disable Style/Documentation
     pretty_print
   end
 
+  def check_message
+    print 'Warning! '.fg_color(:red)
+    print 'your king is under attack'
+    print '\n'
+    puts '   ***CHECK***'
+    puts 'Make a move to esacpe your king'
+  end
+
   private
 
   def pretty_print
