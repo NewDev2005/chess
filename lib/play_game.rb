@@ -47,30 +47,50 @@ class PlayGame # rubocop:disable Style/Documentation
     end
   end
 
-  def register_move(player_obj)
-    select_piece(player_obj)
+  def register_move(player_obj, board)
+    select_piece(player_obj, board)
     select_sqr_to_move_instruction
-    select_sqr_to_place_move(player_obj)
-    move_pieces(@board.board, player_obj.select_piece, player_obj.select_sqr_to_place)
-    @board.display_board
+    select_sqr_to_place_move(player_obj, board)
+    move_pieces(board.board, player_obj.select_piece, player_obj.select_sqr_to_place)
+    board.display_board
   end
 
-  def select_piece(player)
+  def select_piece(player, board)
     choose_piece_message(player)
     player.prompt_player_to_select_piece
-    @game_features.mark_valid_moves_of_selected_piece(@board.board, player.select_piece)
-    @board.display_board
+    @game_features.mark_valid_moves_of_selected_piece(board.board, player.select_piece)
+    board.display_board
     @game_features.unmark_the_marked_sqr
-    @game_features.print_legal_moves(@board.board, player.select_piece)
+    @game_features.print_legal_moves(board.board, player.select_piece)
   end
 
-  def select_sqr_to_place_move(player)
+  def select_sqr_to_place_move(player, board)
     player.prompt_player_to_select_sqr
     until player.select_sqr_to_place != 'back'
-      select_piece(player)
+      select_piece(player, board)
       select_sqr_to_move_instruction
       player.prompt_player_to_select_sqr
     end
+  end
+
+  def prompt_user_to_escape_check(player)
+    cloned_board = @board.clone
+    p cloned_board == @board
+    until @check.in_check?(alter_color(player.color_pick), cloned_board.board) == false
+      # cloned_board = @board.clone
+      check_message
+      select_piece(player, cloned_board)
+      select_sqr_to_move_instruction
+      select_sqr_to_place_move(player, cloned_board)
+      move_pieces(cloned_board.board, player.select_piece, player.select_sqr_to_place)
+      if @check.in_check?(alter_color(player.color_pick), cloned_board.board)
+        @board.display_board
+        cloned_board = @board.clone
+      end
+    end
+    move_pieces(@board.board, player.select_piece, player.select_sqr_to_place)
+    @board.display_board
+    # cloned_board.display_board
   end
 
   def get_piece_color(coord)
@@ -86,9 +106,25 @@ class PlayGame # rubocop:disable Style/Documentation
   end
 
   def game_loop
+    players = [@player1, @player2]
     loop do
-      register_move(@player1)
-      register_move(@player2)
+      # register_move(@player1)
+      # register_move(@player2)
+      players.each do |player|
+        if @check.in_check?(alter_color(player.color_pick), @board.board)
+          prompt_user_to_escape_check(player)
+          next
+        end
+        register_move(player, @board)
+      end
+    end
+  end
+
+  def alter_color(color)
+    if color == :black
+      :white
+    else
+      :black
     end
   end
 end
