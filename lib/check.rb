@@ -24,17 +24,14 @@ class Check # rubocop:disable Style/Documentation
     false
   end
 
-  # def prompt_user_to_escape_check(origin, destination)
-  #   cloned_board = @board.clone
-  #   move_pieces(cloned_board, origin, destination)
-  # end
-
   private
 
   def iterate_through_pieces(pieces, board)
     pieces.each do |piece|
-      if piece.instance_of?(Pawn) && piece.legal_capture_move(board).empty? == false
-        @number_of_check += 1 if found_king?(piece.legal_capture_move(board), board)
+      if piece.instance_of?(Pawn) && piece.legal_capture_move(board).empty? == false && found_king?(
+        piece.legal_capture_move(board), board
+      )
+        @number_of_check += 1
       end
 
       next unless piece.get_legal_moves(board).empty? == false && piece.instance_of?(Pawn) == false
