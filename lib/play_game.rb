@@ -74,42 +74,33 @@ class PlayGame # rubocop:disable Style/Documentation
   end
 
   def prompt_user_to_escape_check(player)
-    cloned_board = @board.clone
-    p cloned_board == @board
+    cloned_board = Marshal.load(Marshal.dump(@board))
     until @check.in_check?(alter_color(player.color_pick), cloned_board.board) == false
-      # cloned_board = @board.clone
-      check_message
-      select_piece(player, cloned_board)
-      select_sqr_to_move_instruction
-      select_sqr_to_place_move(player, cloned_board)
-      move_pieces(cloned_board.board, player.select_piece, player.select_sqr_to_place)
+      register_move_in_cloned_board(player, cloned_board)
       if @check.in_check?(alter_color(player.color_pick), cloned_board.board)
         @board.display_board
-        cloned_board = @board.clone
+        cloned_board = Marshal.load(Marshal.dump(@board))
       end
     end
-    move_pieces(@board.board, player.select_piece, player.select_sqr_to_place)
-    @board.display_board
-    # cloned_board.display_board
+    update_original_board(@board, player)
   end
 
-  def get_piece_color(coord)
-    @board.board.each do |rank_num, files|
-      next unless rank_num == coord[1]
+  def register_move_in_cloned_board(player, cloned_board)
+    check_message
+    select_piece(player, cloned_board)
+    select_sqr_to_move_instruction
+    select_sqr_to_place_move(player, cloned_board)
+    move_pieces(cloned_board.board, player.select_piece, player.select_sqr_to_place)
+  end
 
-      files.each do |elem|
-        elem.each do |alphabetic_coord, sqr|
-          return sqr.piece.fg_color if alphabetic_coord == coord[0]
-        end
-      end
-    end
+  def update_original_board(board, player)
+    move_pieces(board.board, player.select_piece, player.select_sqr_to_place)
+    board.display_board
   end
 
   def game_loop
     players = [@player1, @player2]
     loop do
-      # register_move(@player1)
-      # register_move(@player2)
       players.each do |player|
         if @check.in_check?(alter_color(player.color_pick), @board.board)
           prompt_user_to_escape_check(player)
