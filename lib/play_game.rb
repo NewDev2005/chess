@@ -5,7 +5,7 @@ require_relative 'player'
 require_relative 'instruction'
 require_relative 'game_logic'
 require_relative 'game_features'
-require_relative 'check'
+require_relative 'check_mate'
 
 class PlayGame # rubocop:disable Style/Documentation
   include GameInstruction
@@ -16,6 +16,7 @@ class PlayGame # rubocop:disable Style/Documentation
     @player2 = Player.new(board)
     @game_features = GameFeatures.new
     @check = Check.new(board)
+    @winner_name = nil
   end
 
   def start
@@ -23,6 +24,7 @@ class PlayGame # rubocop:disable Style/Documentation
     @board.create_board
     @board.display_board
     game_loop
+    declare_winner_message(@winner_name)
   end
 
   private
@@ -75,9 +77,9 @@ class PlayGame # rubocop:disable Style/Documentation
 
   def prompt_user_to_escape_check(player)
     cloned_board = Marshal.load(Marshal.dump(@board))
-    until @check.in_check?(alter_color(player.color_pick), cloned_board.board) == false
+    until @check.in_check?(player.color_pick, cloned_board.board) == false
       register_move_in_cloned_board(player, cloned_board)
-      if @check.in_check?(alter_color(player.color_pick), cloned_board.board)
+      if @check.in_check?(player.color_pick, cloned_board.board)
         @board.display_board
         cloned_board = Marshal.load(Marshal.dump(@board))
       end
@@ -102,20 +104,20 @@ class PlayGame # rubocop:disable Style/Documentation
     players = [@player1, @player2]
     loop do
       players.each do |player|
-        if @check.in_check?(alter_color(player.color_pick), @board.board)
-          prompt_user_to_escape_check(player)
-          next
-        end
+        return if verify_check?(player) && @check.check_mate?(player.color_pick, @board.board)
+
+        prompt_user_to_escape_check(player) if verify_check?(player)
         register_move(player, @board)
       end
     end
   end
 
-  def alter_color(color)
-    if color == :black
-      :white
+  def verify_check?(player)
+    if @check.in_check?(player.color_pick, @board.board)
+      @winner_name = player.name
+      true
     else
-      :black
+      false
     end
   end
 end
