@@ -7,7 +7,7 @@ require_relative 'game_logic'
 require_relative 'game_features'
 require_relative 'check_mate'
 
-class PlayGame # rubocop:disable Style/Documentation
+class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   include GameInstruction
   include GameLogic
   def initialize(board = Board.new)
@@ -51,8 +51,8 @@ class PlayGame # rubocop:disable Style/Documentation
 
   def register_move(player_obj, board)
     select_piece(player_obj, board)
-    select_sqr_to_move_instruction
     select_sqr_to_place_move(player_obj, board)
+    verify_illegal_move(player_obj, board)
     move_pieces(board.board, player_obj.select_piece, player_obj.select_sqr_to_place)
     board.display_board
   end
@@ -67,6 +67,7 @@ class PlayGame # rubocop:disable Style/Documentation
   end
 
   def select_sqr_to_place_move(player, board)
+    select_sqr_to_move_instruction
     player.prompt_player_to_select_sqr
     until player.select_sqr_to_place != 'back'
       select_piece(player, board)
@@ -90,7 +91,6 @@ class PlayGame # rubocop:disable Style/Documentation
   def register_move_in_cloned_board(player, cloned_board)
     check_message
     select_piece(player, cloned_board)
-    select_sqr_to_move_instruction
     select_sqr_to_place_move(player, cloned_board)
     move_pieces(cloned_board.board, player.select_piece, player.select_sqr_to_place)
   end
@@ -118,6 +118,14 @@ class PlayGame # rubocop:disable Style/Documentation
       true
     else
       false
+    end
+  end
+
+  def verify_illegal_move(player, board)
+    while @check.illegal_move?(player.select_piece, player.select_sqr_to_place)
+      illegal_move_message
+      select_piece(player, board)
+      select_sqr_to_place_move(player, board)
     end
   end
 end
