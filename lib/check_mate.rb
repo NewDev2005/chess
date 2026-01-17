@@ -37,7 +37,7 @@ class Check # rubocop:disable Style/Documentation
   # illegal_move: any move that puts one's king in check
   def illegal_move?(origin, destination)
     cloned_board = Marshal.load(Marshal.dump(@board))
-    piece_color = get_the_sqr_obj(cloned_board).piece.fg_color
+    piece_color = get_the_sqr_obj(cloned_board.board, origin).piece.fg_color
     move_pieces(cloned_board.board, origin, destination)
     return true if in_check?(piece_color, cloned_board.board)
 
