@@ -1,4 +1,4 @@
-require_relative 'lib/square'
+require_relative 'lib/play_game'
 
-sqr = Square.new(:brown, "\u2656", :white).to_s
-puts sqr
+game = PlayGame.new
+game.start
