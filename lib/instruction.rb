@@ -63,9 +63,22 @@ module GameInstruction # rubocop:disable Style/Documentation
   def check_message
     print 'Warning! '.fg_color(:red)
     print 'your king is under attack'
-    print '\n'
+    puts "\n"
     puts '   ***CHECK***'
     puts 'Make a move to esacpe your king'
+    print "\n"
+  end
+
+  def declare_winner_message(name)
+    print "</Congrats #{name}, you have won the game!>"
+  end
+
+  def illegal_move_message
+    print "\n"
+    print 'illegal move: '.fg_color(:red)
+    print 'It could potentially put your king under immediate attack'
+    print "\n"
+    print "\n"
   end
 
   private
