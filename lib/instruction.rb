@@ -81,6 +81,18 @@ module GameInstruction # rubocop:disable Style/Documentation
     print "\n"
   end
 
+  def pawn_promotion_message
+    puts 'Pawn Promotion:'.fg_color(:blue)
+    print 'Your pawn has reached the last rank'
+    puts 'Promote your pawn into one of the pieces mentioned below'
+    puts 'Q => Queen'
+    puts 'K => Knight'
+    puts 'B => Bishop'
+    puts 'R => Rook'
+    puts 'its case insensitive so dont worry'
+    pretty_print
+  end
+
   private
 
   def pretty_print
