@@ -6,10 +6,12 @@ require_relative 'instruction'
 require_relative 'game_logic'
 require_relative 'game_features'
 require_relative 'check_mate'
+require_relative 'pawn_promotion'
 
 class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   include GameInstruction
   include GameLogic
+  include PawnPromotion
   def initialize(board = Board.new)
     @board = board
     @player1 = Player.new(board)
@@ -54,6 +56,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     select_sqr_to_place_move(player_obj, board)
     verify_illegal_move(player_obj, board)
     move_pieces(board.board, player_obj.select_piece, player_obj.select_sqr_to_place)
+    promote_pawn(board.board, player_obj.select_sqr_to_place) # executes the code if the pawn reach the last rank
     board.display_board
   end
 
@@ -100,13 +103,16 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     board.display_board
   end
 
-  def game_loop
+  def game_loop # rubocop:disable Metrics/MethodLength
     players = [@player1, @player2]
     loop do
       players.each do |player|
         return if verify_check?(player) && @check.check_mate?(player.color_pick, @board.board)
 
-        prompt_user_to_escape_check(player) if verify_check?(player)
+        if verify_check?(player)
+          prompt_user_to_escape_check(player)
+          next
+        end
         register_move(player, @board)
       end
     end
