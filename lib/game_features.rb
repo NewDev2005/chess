@@ -3,7 +3,6 @@
 class GameFeatures # rubocop:disable Style/Documentation
   def initialize(board)
     @board = board.board
-    @coord = nil
     @piece_color = nil
     @marked_sqr = []
     @captured_sqr = []
