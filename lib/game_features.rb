@@ -32,8 +32,8 @@ class GameFeatures # rubocop:disable Style/Documentation
   def identify_valid_movements_of_piece(moves)
     moves.each do |coord|
       sqr = get_the_sqr_obj(coord)
-      highlight_captured_piece(sqr, coord) if sqr.piece != '  '
-      mark_the_empty_sqr_with_dot(sqr, coord) if sqr.piece == '  '
+      highlight_captured_piece(sqr) if sqr.piece != '  '
+      mark_the_empty_sqr_with_dot(sqr) if sqr.piece == '  '
     end
   end
 
