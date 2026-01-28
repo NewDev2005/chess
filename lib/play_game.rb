@@ -7,16 +7,18 @@ require_relative 'game_logic'
 require_relative 'game_features'
 require_relative 'check_mate'
 require_relative 'pawn_promotion'
+require_relative 'en_passant'
 
 class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   include GameInstruction
   include GameLogic
   include PawnPromotion
+  include EnPassant
   def initialize(board = Board.new)
     @board = board
     @player1 = Player.new(board)
     @player2 = Player.new(board)
-    @game_features = GameFeatures.new
+    @game_features = GameFeatures.new(board)
     @check = Check.new(board)
     @winner_name = nil
   end
@@ -55,7 +57,10 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     select_piece(player_obj, board)
     select_sqr_to_place_move(player_obj, board)
     verify_illegal_move(player_obj, board)
+    en_passant_capture(player_obj.select_piece, player_obj.select_sqr_to_place, board.board)
+    disable_en_passant_in_next_turn(player_obj.color_pick, board.board)
     move_pieces(board.board, player_obj.select_piece, player_obj.select_sqr_to_place)
+    enable_en_passant_capture(player_obj.select_sqr_to_place, board.board)
     promote_pawn(board.board, player_obj.select_sqr_to_place) # executes the code if the pawn reach the last rank
     board.display_board
   end
@@ -63,10 +68,10 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   def select_piece(player, board)
     choose_piece_message(player)
     player.prompt_player_to_select_piece
-    @game_features.mark_valid_moves_of_selected_piece(board.board, player.select_piece)
+    @game_features.mark_valid_moves_of_selected_piece(player.select_piece)
     board.display_board
     @game_features.unmark_the_marked_sqr
-    @game_features.print_legal_moves(board.board, player.select_piece)
+    @game_features.print_legal_moves(player.select_piece)
   end
 
   def select_sqr_to_place_move(player, board)
