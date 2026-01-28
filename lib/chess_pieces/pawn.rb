@@ -2,12 +2,13 @@
 
 require_relative '../color'
 require_relative 'legal_moves'
+require_relative '../en_passant'
 
 class Pawn # rubocop:disable Style/Documentation
   include LegalMoves
-  attr_accessor :bg_color
+  include EnPassant
+  attr_accessor :bg_color, :previous_position, :en_passant_capture_mode
   attr_reader :current_position, :fg_color
-  attr_writer :previous_position
 
   using Color
   def initialize(fg_color, current_position = nil)
@@ -17,6 +18,7 @@ class Pawn # rubocop:disable Style/Documentation
     @current_position = current_position
     @legal_moves = []
     @previous_position = nil
+    @en_passant_capture_mode = nil
   end
 
   def movement
@@ -51,7 +53,7 @@ class Pawn # rubocop:disable Style/Documentation
   def legal_capture_move(board)
     @legal_moves = []
     movement.each do |key, arr|
-      next if arr.empty? && key != :capture_move
+      next unless arr.empty? == false && key == :capture_move
 
       push_legal_capture_move(board, arr)
     end
@@ -124,6 +126,12 @@ class Pawn # rubocop:disable Style/Documentation
 
       move = verify_legal_moves(board, coord, @fg_color)
       @legal_moves.push(move) if move.nil? == false
+    end
+    return unless en_passant(@current_position, board, @fg_color).nil? == false
+
+    moves = en_passant(@current_position, board, @fg_color)
+    moves.each do |move|
+      @legal_moves.push(move)
     end
   end
 
