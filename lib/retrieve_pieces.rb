@@ -25,4 +25,40 @@ module PieceRetrieval
     end
     pieces
   end
+
+  def alter_color(color)
+    if color == :black
+      :white
+    else
+      :black
+    end
+  end
+
+  def get_the_sqr(board, coord)
+    board.each do |rank, file|
+      next unless rank == coord[1]
+
+      file.each do |elem|
+        elem.each do |algebraic_coord, sqr|
+          next unless algebraic_coord == coord[0]
+
+          return sqr
+        end
+      end
+    end
+  end
+
+  def get_the_piece(board, coord)
+    board.each do |rank, files|
+      next unless rank == coord[1]
+
+      files.each do |elem|
+        elem.each do |algebraic_coord, sqr|
+          next unless algebraic_coord == coord[0]
+
+          return sqr.piece
+        end
+      end
+    end
+  end
 end
