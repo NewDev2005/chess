@@ -5,7 +5,7 @@ require_relative 'legal_moves'
 
 class King # rubocop:disable Style/Documentation
   include LegalMoves
-  attr_accessor :bg_color
+  attr_accessor :bg_color, :previous_position
   attr_reader :current_position, :fg_color
 
   using Color
@@ -16,6 +16,7 @@ class King # rubocop:disable Style/Documentation
     @current_position = current_position
     @possible_moves = []
     @legal_moves = []
+    @previous_position = nil
   end
 
   def to_s
