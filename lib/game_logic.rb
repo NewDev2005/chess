@@ -32,7 +32,7 @@ module GameLogic # rubocop:disable Style/Documentation
         next unless alphabetic_coord == destination[0]
 
         sqr.piece = sqr_propertities[0]
-        sqr.piece.previous_position = sqr.piece.current_position if sqr.piece.instance_of?(Pawn)
+        update_previous_position(sqr)
         sqr.piece.update_current_position(destination) if sqr.piece != '  '
       end
     end
@@ -49,5 +49,11 @@ module GameLogic # rubocop:disable Style/Documentation
       end
     end
     origin_sqr_propertities
+  end
+
+  def update_previous_position(sqr) # rubocop:disable Metrics/AbcSize
+    sqr.piece.previous_position = sqr.piece.current_position if sqr.piece.instance_of?(Pawn)
+    sqr.piece.previous_position = sqr.piece.current_position if sqr.piece.instance_of?(King)
+    sqr.piece.previous_position = sqr.piece.current_position if sqr.piece.instance_of?(Rook)
   end
 end
