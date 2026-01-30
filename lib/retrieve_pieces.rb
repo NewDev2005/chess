@@ -61,4 +61,11 @@ module PieceRetrieval
       end
     end
   end
+
+  def assign_board_obj_to_both_king(board)
+    black_king = get_the_piece(board.board, 'e8')
+    white_king = get_the_piece(board.board, 'e1')
+    black_king.board = board
+    white_king.board = board
+  end
 end
