@@ -68,7 +68,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     board.display_board
   end
 
-  def select_piece(player, board)
+  def select_piece(player)
     choose_piece_message(player)
     player.prompt_player_to_select_piece
     @game_features.mark_valid_moves_of_selected_piece(player.select_piece)
