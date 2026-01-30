@@ -10,15 +10,18 @@ module Castling # rubocop:disable Style/Documentation
     return unless king_in_check?(board, coord) == false
 
     board = board.board
+    k_and_r_not_moved?(board, coord) && vacant_sqrs_in_kingside?(board, coord)
+  end
+
+  def k_and_r_not_moved?(board, coord)
     king_previously_not_moved?(board, coord) && rook_previously_not_moved?(board, coord)
-    # vacant_sqrs_between_king_and_rook?(coord)
   end
 
   def king_in_check?(board, coord)
     king = get_the_piece(board.board, coord)
     king_color = king.fg_color
     check = Check.new(board)
-    check.in_check?(king_color, board)
+    check.in_check?(king_color, board.board)
   end
 
   def king_previously_not_moved?(board, coord)
