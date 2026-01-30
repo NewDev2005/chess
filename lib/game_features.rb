@@ -24,6 +24,11 @@ class GameFeatures # rubocop:disable Style/Documentation
   def print_legal_moves(coord)
     piece = get_the_sqr_obj(coord).piece
     moves = piece.get_legal_moves(@board)
+    if piece.instance_of?(King) && piece.legal_castling_moves.empty? == false
+      piece.legal_castling_moves.each do |move|
+        moves.push(move)
+      end
+    end
     p moves
   end
 
