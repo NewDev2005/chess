@@ -29,7 +29,7 @@ class GameFeatures # rubocop:disable Style/Documentation
         moves.push(move)
       end
     end
-    p moves
+    pretty_print_moves(moves)
   end
 
   private
@@ -91,5 +91,14 @@ class GameFeatures # rubocop:disable Style/Documentation
       end
     end
     legal_moves
+  end
+
+  def pretty_print_moves(moves)
+    print 'legal_moves->> '
+    moves.each do |move|
+      print "#{move}, " if moves[-1] != move
+      print move if moves[-1] == move
+    end
+    puts "\n"
   end
 end
