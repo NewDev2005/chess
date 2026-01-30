@@ -2,9 +2,11 @@
 
 require_relative '../color'
 require_relative 'legal_moves'
+require_relative '../castling'
 
 class King # rubocop:disable Style/Documentation
   include LegalMoves
+  include Castling
   attr_accessor :bg_color, :previous_position
   attr_reader :current_position, :fg_color
   attr_writer :board
@@ -43,6 +45,13 @@ class King # rubocop:disable Style/Documentation
       @legal_moves.push(move) if move.nil? == false
     end
     @legal_moves
+  end
+
+  def legal_castling_moves
+    move = @current_position
+    moves = []
+    moves.push("#{(move[0].ord + 2).chr}#{move[1]}") if king_side_castling_possible?(@board, @current_position)
+    moves
   end
 
   private
