@@ -79,6 +79,12 @@ class GameFeatures # rubocop:disable Style/Documentation
   end
 
   def extract_movements_of_piece(piece)
-    piece.get_legal_moves(@board)
+    legal_moves = piece.get_legal_moves(@board)
+    if piece.instance_of?(King) && piece.legal_castling_moves.empty? == false
+      piece.legal_castling_moves.each do |move|
+        legal_moves.push(move)
+      end
+    end
+    legal_moves
   end
 end
