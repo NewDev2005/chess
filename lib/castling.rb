@@ -36,7 +36,17 @@ module Castling # rubocop:disable Style/Documentation
   end
 
   def vacant_sqrs_in_kingside?(board, coord)
-   sqrs = get_kingside_sqrs(coord)
+    sqrs = get_kingside_sqrs(coord)
+    vacant_sqrs?(board, sqrs)
+  end
+
+  def vacant_sqrs?(board, sqrs)
+    sqrs.each do |sqr_coord|
+      sqr = get_the_sqr(board, sqr_coord)
+      next if sqr.piece == '  '
+      return false if sqr.piece != '  '
+    end
+    true
   end
 
   def get_kingside_sqrs(coord)
