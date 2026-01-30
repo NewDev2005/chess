@@ -8,12 +8,14 @@ require_relative 'game_features'
 require_relative 'check_mate'
 require_relative 'pawn_promotion'
 require_relative 'en_passant'
+require_relative 'retrieve_pieces'
 
 class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   include GameInstruction
   include GameLogic
   include PawnPromotion
   include EnPassant
+  include PieceRetrieval
   def initialize(board = Board.new)
     @board = board
     @player1 = Player.new(board)
@@ -26,6 +28,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   def start
     assign_color_of_the_pieces_to_players_randomly
     @board.create_board
+    assign_board_obj_to_both_king(@board)
     @board.display_board
     game_loop
     declare_winner_message(@winner_name)
