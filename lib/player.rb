@@ -54,6 +54,11 @@ class Player # rubocop:disable Style/Documentation
   def accurate_move?(move)
     piece = get_the_sqr_obj(@select_piece).piece
     valid_moves = piece.get_legal_moves(@board)
+    if piece.instance_of?(King) && piece.legal_castling_moves.empty? == false
+      piece.legal_castling_moves.each do |move|
+        valid_moves.push(move)
+      end
+    end
     valid_moves.include?(move)
   end
 
