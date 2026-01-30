@@ -34,6 +34,17 @@ module Castling # rubocop:disable Style/Documentation
 
     false
   end
+
+  def vacant_sqrs_in_kingside?(board, coord)
+   sqrs = get_kingside_sqrs(coord)
+  end
+
+  def get_kingside_sqrs(coord)
+    sqrs = []
+    sqrs.push("#{(coord[0].ord + 1).chr}#{coord[1]}")
+    sqrs.push("#{(coord[0].ord + 2).chr}#{coord[1]}")
+    sqrs
+  end
 end
 
 # castling conditions:
