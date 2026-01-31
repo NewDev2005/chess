@@ -7,7 +7,7 @@ module Castling # rubocop:disable Style/Documentation
   include PieceRetrieval
 
   def king_side_castling_possible?(board, coord)
-    return unless king_in_check?(board, coord) == false
+    return false unless king_in_check?(board, coord) == false && %w[e1 e8].include?(coord)
 
     board = board.board
     k_and_r_not_moved?(board, coord, 'kingside') && vacant_sqrs_in_kingside?(board, coord)
