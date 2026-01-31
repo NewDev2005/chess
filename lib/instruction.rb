@@ -71,6 +71,7 @@ module GameInstruction # rubocop:disable Style/Documentation
 
   def declare_winner_message(name)
     print "</Congrats #{name}, you have won the game!>"
+    puts '\n'
   end
 
   def illegal_move_message
