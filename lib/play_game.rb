@@ -122,13 +122,13 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
           next
         end
         register_move(player, @board)
+        @winner_name = player.name
       end
     end
   end
 
   def verify_check?(player)
     if @check.in_check?(player.color_pick, @board.board)
-      @winner_name = player.name
       true
     else
       false
