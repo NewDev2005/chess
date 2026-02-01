@@ -30,7 +30,6 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   def start
     assign_color_of_the_pieces_to_players_randomly
     @board.create_board
-    assign_board_obj_to_both_king(@board)
     @board.display_board
     game_loop
     declare_winner_message(@winner_name)
