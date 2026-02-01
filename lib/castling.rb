@@ -44,7 +44,7 @@ module Castling # rubocop:disable Style/Documentation
   end
 
   def kingiside_rook_coord(rook_color)
-    return 'hi' if rook_color == :white
+    return 'h1' if rook_color == :white
 
     'h8'
   end
