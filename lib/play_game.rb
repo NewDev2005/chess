@@ -16,6 +16,8 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   include PawnPromotion
   include EnPassant
   include PieceRetrieval
+  attr_reader :board
+
   def initialize(board = Board.new)
     @board = board
     @player1 = Player.new(board)
@@ -32,6 +34,14 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     @board.display_board
     game_loop
     declare_winner_message(@winner_name)
+  end
+
+  def execute_move(color:, origin:, target:, board: @board.board)
+    en_passant_capture(origin, target, board)
+    disable_en_passant_in_next_turn(color, board)
+    move_pieces(board, origin, target)
+    enable_en_passant_capture(target, board)
+    promote_pawn(board, target) # executes the code if the pawn reach the last rank
   end
 
   private
@@ -56,17 +66,21 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     end
   end
 
-  def register_move(player_obj, board)
-    select_piece(player_obj)
-    select_sqr_to_place_move(player_obj, board)
-    verify_illegal_move(player_obj, board)
-    en_passant_capture(player_obj.select_piece, player_obj.select_sqr_to_place, board.board)
-    disable_en_passant_in_next_turn(player_obj.color_pick, board.board)
-    move_pieces(board.board, player_obj.select_piece, player_obj.select_sqr_to_place)
-    enable_en_passant_capture(player_obj.select_sqr_to_place, board.board)
-    promote_pawn(board.board, player_obj.select_sqr_to_place) # executes the code if the pawn reach the last rank
+  def register_move(player, board)
+    select_piece(player)
+    select_sqr_to_place_move(player)
+    verify_illegal_move(player, board)
+    execute_move(color: player.color_pick, board: board.board, origin: player.select_piece, target: player.select_sqr_to_place)
     board.display_board
   end
+
+  # def execute_move(color:, board:, piece:, target:)
+  #   en_passant_capture(piece, target, board)
+  #   disable_en_passant_in_next_turn(color, board)
+  #   move_pieces(board, piece, target)
+  #   enable_en_passant_capture(target, board)
+  #   promote_pawn(board, target) # executes the code if the pawn reach the last rank
+  # end
 
   def select_piece(player)
     choose_piece_message(player)
@@ -77,7 +91,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     @game_features.print_legal_moves(player.select_piece)
   end
 
-  def select_sqr_to_place_move(player, board)
+  def select_sqr_to_place_move(player)
     select_sqr_to_move_instruction
     player.prompt_player_to_select_sqr
     until player.select_sqr_to_place != 'back'
@@ -102,7 +116,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   def register_move_in_cloned_board(player, cloned_board)
     check_message
     select_piece(player)
-    select_sqr_to_place_move(player, cloned_board)
+    select_sqr_to_place_move(player)
     move_pieces(cloned_board.board, player.select_piece, player.select_sqr_to_place)
   end
 
