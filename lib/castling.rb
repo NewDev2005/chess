@@ -14,6 +14,8 @@ module Castling # rubocop:disable Style/Documentation
     k_and_r_not_moved?(board, coord, 'kingside') && vacant_sqrs_in_kingside?(board, coord, color)
   end
 
+  private
+
   def k_and_r_not_moved?(board, coord, rook_type)
     color = get_the_piece(board, coord).fg_color
     king_previously_not_moved?(board, coord) && rook_previously_not_moved?(board, rook_type, color)
