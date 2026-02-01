@@ -3,6 +3,7 @@
 class GameFeatures # rubocop:disable Style/Documentation
   def initialize(board)
     @board = board.board
+    @board_obj = board
     @piece_color = nil
     @marked_sqr = []
     @captured_sqr = []
@@ -24,8 +25,8 @@ class GameFeatures # rubocop:disable Style/Documentation
   def print_legal_moves(coord)
     piece = get_the_sqr_obj(coord).piece
     moves = piece.get_legal_moves(@board)
-    if piece.instance_of?(King) && piece.legal_castling_moves.empty? == false
-      piece.legal_castling_moves.each do |move|
+    if piece.instance_of?(King) && piece.legal_castling_moves(@board_obj).empty? == false
+      piece.legal_castling_moves(@board_obj).each do |move|
         moves.push(move)
       end
     end
@@ -85,8 +86,8 @@ class GameFeatures # rubocop:disable Style/Documentation
 
   def extract_movements_of_piece(piece)
     legal_moves = piece.get_legal_moves(@board)
-    if piece.instance_of?(King) && piece.legal_castling_moves.empty? == false
-      piece.legal_castling_moves.each do |move|
+    if piece.instance_of?(King) && piece.legal_castling_moves(@board_obj).empty? == false
+      piece.legal_castling_moves(@board_obj).each do |move|
         legal_moves.push(move)
       end
     end
