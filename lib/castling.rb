@@ -10,12 +10,18 @@ module Castling # rubocop:disable Style/Documentation
     return false unless king_in_check?(board, coord) == false && %w[e1 e8].include?(coord)
 
     board = board.board
-    k_and_r_not_moved?(board, coord, 'kingside') && vacant_sqrs_in_kingside?(board, coord)
+    color = get_the_piece(board, coord).fg_color
+    k_and_r_not_moved?(board, coord, 'kingside') && vacant_sqrs_in_kingside?(board, coord, color)
   end
 
   def k_and_r_not_moved?(board, coord, rook_type)
     color = get_the_piece(board, coord).fg_color
     king_previously_not_moved?(board, coord) && rook_previously_not_moved?(board, rook_type, color)
+  end
+
+  def vacant_sqrs_in_kingside?(board, coord, color)
+    sqrs = get_kingside_sqrs(coord)
+    vacant_sqrs?(board, sqrs) && sqrs_being_attacked_by_enemy?(sqrs, board, color) == false
   end
 
   def king_in_check?(board, coord)
@@ -49,11 +55,6 @@ module Castling # rubocop:disable Style/Documentation
     'h8'
   end
 
-  def vacant_sqrs_in_kingside?(board, coord)
-    sqrs = get_kingside_sqrs(coord)
-    vacant_sqrs?(board, sqrs)
-  end
-
   def vacant_sqrs?(board, sqrs)
     sqrs.each do |sqr_coord|
       sqr = get_the_sqr(board, sqr_coord)
@@ -61,6 +62,17 @@ module Castling # rubocop:disable Style/Documentation
       return false if sqr.piece != '  '
     end
     true
+  end
+
+  def sqrs_being_attacked_by_enemy?(sqrs_coord, board, color)
+    enemy_color = alter_color(color)
+    enemy_pieces = retrieve_pieces(board, enemy_color)
+    sqrs_coord.each do |coord|
+      enemy_pieces.each do |piece|
+        return true if piece.get_legal_moves(board).include?(coord)
+      end
+    end
+    false
   end
 
   def get_kingside_sqrs(coord)
