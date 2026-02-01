@@ -10,6 +10,7 @@ class Player # rubocop:disable Style/Documentation
   def initialize(board)
     @name = nil
     @color_pick = nil
+    @board_obj = board
     @select_piece = nil
     @select_sqr_to_place = nil
     @board = board.board
@@ -54,8 +55,8 @@ class Player # rubocop:disable Style/Documentation
   def accurate_move?(move)
     piece = get_the_sqr_obj(@select_piece).piece
     valid_moves = piece.get_legal_moves(@board)
-    if piece.instance_of?(King) && piece.legal_castling_moves.empty? == false
-      piece.legal_castling_moves.each do |move|
+    if piece.instance_of?(King) && piece.legal_castling_moves(@board_obj).empty? == false
+      piece.legal_castling_moves(@board_obj).each do |move|
         valid_moves.push(move)
       end
     end
