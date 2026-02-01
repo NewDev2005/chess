@@ -9,7 +9,6 @@ class King # rubocop:disable Style/Documentation
   include Castling
   attr_accessor :bg_color, :previous_position
   attr_reader :current_position, :fg_color
-  attr_writer :board
 
   using Color
   def initialize(fg_color, current_position = nil)
@@ -20,7 +19,6 @@ class King # rubocop:disable Style/Documentation
     @possible_moves = []
     @legal_moves = []
     @previous_position = nil
-    @board = nil
   end
 
   def to_s
@@ -47,10 +45,10 @@ class King # rubocop:disable Style/Documentation
     @legal_moves
   end
 
-  def legal_castling_moves
+  def legal_castling_moves(board)
     move = @current_position
     moves = []
-    moves.push("#{(move[0].ord + 2).chr}#{move[1]}") if king_side_castling_possible?(@board, @current_position)
+    moves.push("#{(move[0].ord + 2).chr}#{move[1]}") if king_side_castling_possible?(board, @current_position)
     moves
   end
 
