@@ -38,7 +38,7 @@ describe 'Castling' do
     expect(legal_kingside_castling_move).to_not include('g8')
   end
 
-  it 'when the king has previously has moved castling is not possible' do
+  it 'when the king has previously  moved castling is not possible' do
     game = PlayGame.new
     game.board.create_board
     board = game.board.board
