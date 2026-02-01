@@ -89,4 +89,23 @@ describe 'Castling' do # rubocop:disable Metrics/BlockLength
 
     expect(legal_kingside_castling_move).to be_empty
   end
+
+  it 'when one of the vacant squares is being attacked by enemy piece' do
+    game = PlayGame.new
+    game.board.create_board
+    board = game.board.board
+    board_obj = game.board
+
+    game.execute_move(color: :white, origin: 'd2', target: 'd4')
+    game.execute_move(color: :white, origin: 'c1', target: 'h6')
+    game.execute_move(color: :black, origin: 'g7', target: 'g5')
+    game.execute_move(color: :black, origin: 'g8', target: 'f7')
+    game.execute_move(color: :black, origin: 'e7', target: 'e6')
+    game.execute_move(color: :black, origin: 'f8', target: 'e7')
+
+    king = game.get_the_piece(board, 'e1')
+    legal_castling_moves = king.legal_castling_moves(board_obj)
+
+    expect(legal_castling_moves).to be_empty
+  end
 end
