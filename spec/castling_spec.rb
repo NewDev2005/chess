@@ -52,7 +52,6 @@ describe 'Castling' do # rubocop:disable Metrics/BlockLength
     game.execute_move(color: :black, origin: 'f8', target: 'e8')
 
     king = game.get_the_piece(board, 'e8')
-    king.previous_position
     legal_kingside_castling_move = king.legal_castling_moves(board_obj)
 
     expect(legal_kingside_castling_move).to_not include('g8')
@@ -72,9 +71,22 @@ describe 'Castling' do # rubocop:disable Metrics/BlockLength
     game.execute_move(color: :black, origin: 'g8', target: 'h8')
 
     king = game.get_the_piece(board, 'e8')
-    king.previous_position
     legal_kingside_castling_move = king.legal_castling_moves(board_obj)
 
     expect(legal_kingside_castling_move).to_not include('g8')
+  end
+
+  it 'when only one vacant sqr is present between king and rook in kingside' do
+    game = PlayGame.new
+    game.board.create_board
+    board = game.board.board
+    board_obj = game.board
+
+    game.execute_move(color: :white, origin: 'g1', target: 'h3')
+
+    king = game.get_the_piece(board, 'e1')
+    legal_kingside_castling_move = king.legal_castling_moves(board_obj)
+
+    expect(legal_kingside_castling_move).to be_empty
   end
 end
