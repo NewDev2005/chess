@@ -108,4 +108,32 @@ describe 'Castling' do # rubocop:disable Metrics/BlockLength
 
     expect(legal_castling_moves).to be_empty
   end
+
+  it 'when castling kingisde rook moves to square passed over by the king' do
+    game = PlayGame.new
+    game.board.create_board
+    board = game.board.board
+
+    game.execute_move(color: :white, origin: 'e2', target: 'e4')
+    game.execute_move(color: :white, origin: 'f1', target: 'd3')
+    game.execute_move(color: :white, origin: 'g1', target: 'h3')
+    game.execute_move(color: :white, origin: 'e1', target: 'g1')
+
+    piece = game.get_the_piece(board, 'f1')
+    expect(piece).to be_instance_of(Rook)
+  end
+
+  it 'After castling kingside rook leaves its previous position' do
+    game = PlayGame.new
+    game.board.create_board
+    board = game.board.board
+
+    game.execute_move(color: :white, origin: 'e2', target: 'e4')
+    game.execute_move(color: :white, origin: 'f1', target: 'd3')
+    game.execute_move(color: :white, origin: 'g1', target: 'h3')
+    game.execute_move(color: :white, origin: 'e1', target: 'g1')
+
+    piece = game.get_the_piece(board, 'h1')
+    expect(piece).to be('  ')
+  end
 end
