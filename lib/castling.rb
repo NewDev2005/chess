@@ -2,6 +2,7 @@
 
 require_relative 'retrieve_pieces'
 require_relative 'check_mate'
+require_relative 'game_logic'
 
 module Castling # rubocop:disable Style/Documentation
   include PieceRetrieval
@@ -12,6 +13,16 @@ module Castling # rubocop:disable Style/Documentation
     board = board.board
     color = get_the_piece(board, coord).fg_color
     k_and_r_not_moved?(board, coord, 'kingside') && vacant_sqrs_in_kingside?(board, coord, color)
+  end
+
+  def move_rook_kingside(origin, target, board)
+    piece = get_the_piece(board, origin)
+    return unless piece.instance_of?(King) && target[0].ord - origin[0].ord == 2
+
+    # move black rook kingside
+    move_pieces(board, 'h8', 'f8') if origin.end_with?('8') && target.end_with?('8')
+    # move white rook kingside
+    move_pieces(board, 'h1', 'f1') if origin.end_with?('1') && target.end_with?('1')
   end
 
   private
