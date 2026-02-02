@@ -15,6 +15,14 @@ module Castling # rubocop:disable Style/Documentation
     k_and_r_not_moved?(board, coord, 'kingside') && vacant_sqrs_in_kingside?(board, coord, color)
   end
 
+  def queenside_castling_possible?(board, coord)
+    return false unless king_in_check?(board, coord) == false && %w[e1 e8].include?(coord)
+
+    board = board.board
+    color = get_the_piece(board, coord).fg_color
+    k_and_r_not_moved?(board, coord, 'queenside') && vacant_sqrs_in_queenside?(board, coord, color)
+  end
+
   def move_rook_kingside(origin, target, board)
     piece = get_the_piece(board, origin)
     return unless piece.instance_of?(King) && target[0].ord - origin[0].ord == 2
@@ -23,6 +31,14 @@ module Castling # rubocop:disable Style/Documentation
     move_pieces(board, 'h8', 'f8') if origin.end_with?('8') && target.end_with?('8')
     # move white rook kingside
     move_pieces(board, 'h1', 'f1') if origin.end_with?('1') && target.end_with?('1')
+  end
+
+  def move_rook_queenside(origin, target, board)
+    piece = get_the_piece(board, origin)
+    return unless piece.instance_of?(King) && origin[0].ord - target[0].ord == 2
+
+    move_pieces(board, 'a8', 'd8') if origin.end_with?('8') && target.end_with?('8')
+    move_pieces(board, 'a1', 'd1') if origin.end_with?('1') && target.end_with?('1')
   end
 
   private
@@ -34,6 +50,11 @@ module Castling # rubocop:disable Style/Documentation
 
   def vacant_sqrs_in_kingside?(board, coord, color)
     sqrs = get_kingside_sqrs(coord)
+    vacant_sqrs?(board, sqrs) && sqrs_being_attacked_by_enemy?(sqrs, board, color) == false
+  end
+
+  def vacant_sqrs_in_queenside?(board, coord, color)
+    sqrs = get_queenside_sqrs(coord)
     vacant_sqrs?(board, sqrs) && sqrs_being_attacked_by_enemy?(sqrs, board, color) == false
   end
 
@@ -53,6 +74,7 @@ module Castling # rubocop:disable Style/Documentation
 
   def rook_previously_not_moved?(board, rook_type, color)
     rook_coord = kingiside_rook_coord(color) if rook_type == 'kingside'
+    rook_coord = queenside_rook_coord(color) if rook_type == 'queenside'
     sqr = get_the_sqr(board, rook_coord)
     return false unless sqr.piece != '  ' && sqr.piece.instance_of?(Rook)
 
@@ -66,6 +88,12 @@ module Castling # rubocop:disable Style/Documentation
     return 'h1' if rook_color == :white
 
     'h8'
+  end
+
+  def queenside_rook_coord(rook_color)
+    return 'a8' if rook_color == :black
+
+    'a1'
   end
 
   def vacant_sqrs?(board, sqrs)
@@ -92,6 +120,14 @@ module Castling # rubocop:disable Style/Documentation
     sqrs = []
     sqrs.push("#{(coord[0].ord + 1).chr}#{coord[1]}")
     sqrs.push("#{(coord[0].ord + 2).chr}#{coord[1]}")
+    sqrs
+  end
+
+  def get_queenside_sqrs(move)
+    sqrs = []
+    (1..3).each do |i|
+      sqrs.push("#{(move[0].ord - i).chr}#{move[1]}")
+    end
     sqrs
   end
 end
