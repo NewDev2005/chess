@@ -136,4 +136,74 @@ describe 'Castling' do # rubocop:disable Metrics/BlockLength
     piece = game.get_the_piece(board, 'h1')
     expect(piece).to be('  ')
   end
+
+  it 'Queenside castling move is available when no sqrs between rook and king' do
+    game = PlayGame.new
+    game.board.create_board
+    board = game.board.board
+    board_obj = game.board
+
+    game.execute_move(color: :white, origin: 'd2', target: 'd4')
+    game.execute_move(color: :white, origin: 'c1', target: 'c3')
+    game.execute_move(color: :white, origin: 'd1', target: 'd3')
+    game.execute_move(color: :white, origin: 'b1', target: 'c3')
+
+    king = game.get_the_piece(board, 'e1')
+    legal_queenside_castling_move = king.legal_castling_moves(board_obj)
+
+    expect(legal_queenside_castling_move).to include('c1')
+  end
+
+  it 'when both the kingside and queenside castling moves are available' do
+    game = PlayGame.new
+    game.board.create_board
+    board = game.board.board
+    board_obj = game.board
+
+    game.execute_move(color: :white, origin: 'd2', target: 'd4')
+    game.execute_move(color: :white, origin: 'c1', target: 'c3')
+    game.execute_move(color: :white, origin: 'd1', target: 'd3')
+    game.execute_move(color: :white, origin: 'b1', target: 'c3')
+    game.execute_move(color: :white, origin: 'g2', target: 'g4')
+    game.execute_move(color: :white, origin: 'f1', target: 'g2')
+    game.execute_move(color: :white, origin: 'g1', target: 'h3')
+
+    king = game.get_the_piece(board, 'e1')
+    legal_castling_moves = king.legal_castling_moves(board_obj)
+
+    expect(legal_castling_moves).to eq(%w[g1 c1])
+  end
+
+  it 'when castles queenside rook moves to sqr passed over by the king' do
+    game = PlayGame.new
+    game.board.create_board
+    board = game.board.board
+
+    game.execute_move(color: :white, origin: 'd2', target: 'd4')
+    game.execute_move(color: :white, origin: 'c1', target: 'c3')
+    game.execute_move(color: :white, origin: 'd1', target: 'd3')
+    game.execute_move(color: :white, origin: 'b1', target: 'c3')
+    game.execute_move(color: :white, origin: 'e1', target: 'c1')
+
+    piece = game.get_the_piece(board, 'd1')
+    expect(piece).to be_instance_of(Rook)
+  end
+
+  it 'when the king has moved previously queenside castling is not possible' do
+    game = PlayGame.new
+    game.board.create_board
+    board = game.board.board
+    board_obj = game.board
+
+    game.execute_move(color: :white, origin: 'd2', target: 'd4')
+    game.execute_move(color: :white, origin: 'c1', target: 'c3')
+    game.execute_move(color: :white, origin: 'd1', target: 'd3')
+    game.execute_move(color: :white, origin: 'b1', target: 'c3')
+    game.execute_move(color: :white, origin: 'e1', target: 'd1')
+    game.execute_move(color: :white, origin: 'd1', target: 'e1')
+
+    king = game.get_the_piece(board, 'e1')
+    legal_castling_moves = king.legal_castling_moves(board_obj)
+    expect(legal_castling_moves).to_not include('c1')
+  end
 end
