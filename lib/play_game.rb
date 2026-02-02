@@ -9,6 +9,7 @@ require_relative 'check_mate'
 require_relative 'pawn_promotion'
 require_relative 'en_passant'
 require_relative 'retrieve_pieces'
+require_relative 'castling'
 
 class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   include GameInstruction
@@ -16,6 +17,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   include PawnPromotion
   include EnPassant
   include PieceRetrieval
+  include Castling
   attr_reader :board
 
   def initialize(board = Board.new)
@@ -38,6 +40,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   def execute_move(color:, origin:, target:, board: @board.board)
     en_passant_capture(origin, target, board)
     disable_en_passant_in_next_turn(color, board)
+    move_rook_kingside(origin, target, board)
     move_pieces(board, origin, target)
     enable_en_passant_capture(target, board)
     promote_pawn(board, target) # executes the code if the pawn reach the last rank
