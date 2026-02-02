@@ -49,6 +49,7 @@ class King # rubocop:disable Style/Documentation
     move = @current_position
     moves = []
     moves.push("#{(move[0].ord + 2).chr}#{move[1]}") if king_side_castling_possible?(board, @current_position)
+    moves.push("#{(move[0].ord - 2).chr}#{move[1]}") if queenside_castling_possible?(board, @current_position)
     moves
   end
 
