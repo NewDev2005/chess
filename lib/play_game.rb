@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'yaml'
+
 require_relative 'board'
 require_relative 'player'
 require_relative 'instruction'
@@ -27,6 +29,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     @game_features = GameFeatures.new(board)
     @check = Check.new(board)
     @winner_name = nil
+    @exit_game = nil
   end
 
   def start
@@ -34,7 +37,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     @board.create_board
     @board.display_board
     game_loop
-    declare_winner_message(@winner_name)
+    declare_winner_message(@winner_name) if @exit_game.nil?
   end
 
   def execute_move(color:, origin:, target:, board: @board.board)
@@ -70,24 +73,24 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   end
 
   def register_move(player, board)
-    select_piece(player)
-    select_sqr_to_place_move(player)
-    verify_illegal_move(player, board)
+    input = select_piece(player)
+    return input if input == 'exit'
+
+    input = select_sqr_to_place_move(player)
+    return input if input == 'exit'
+
+    input = verify_illegal_move(player, board)
+    return 'exit' if input == 'exit'
+
     execute_move(color: player.color_pick, board: board.board, origin: player.select_piece, target: player.select_sqr_to_place)
     board.display_board
   end
 
-  # def execute_move(color:, board:, piece:, target:)
-  #   en_passant_capture(piece, target, board)
-  #   disable_en_passant_in_next_turn(color, board)
-  #   move_pieces(board, piece, target)
-  #   enable_en_passant_capture(target, board)
-  #   promote_pawn(board, target) # executes the code if the pawn reach the last rank
-  # end
-
   def select_piece(player)
     choose_piece_message(player)
-    player.prompt_player_to_select_piece
+    input = player.prompt_player_to_select_piece
+    return 'exit' if input == 'exit'
+
     @game_features.mark_valid_moves_of_selected_piece(player.select_piece)
     @board.display_board
     @game_features.unmark_the_marked_sqr
@@ -96,9 +99,13 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
 
   def select_sqr_to_place_move(player)
     select_sqr_to_move_instruction
-    player.prompt_player_to_select_sqr
+    input = player.prompt_player_to_select_sqr
+    return 'exit' if input == 'exit'
+
     until player.select_sqr_to_place != 'back'
-      select_piece(player)
+      input = select_piece(player)
+      return 'exit' if input == 'exit'
+
       select_sqr_to_move_instruction
       player.prompt_player_to_select_sqr
     end
@@ -107,7 +114,9 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   def prompt_user_to_escape_check(player)
     cloned_board = Marshal.load(Marshal.dump(@board))
     until @check.in_check?(player.color_pick, cloned_board.board) == false
-      register_move_in_cloned_board(player, cloned_board)
+      input = register_move_in_cloned_board(player, cloned_board)
+      return input if input == 'exit'
+
       if @check.in_check?(player.color_pick, cloned_board.board)
         @board.display_board
         cloned_board = Marshal.load(Marshal.dump(@board))
@@ -118,8 +127,12 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
 
   def register_move_in_cloned_board(player, cloned_board)
     check_message
-    select_piece(player)
-    select_sqr_to_place_move(player)
+    input = select_piece(player)
+    return input if input == 'exit'
+
+    input = select_sqr_to_place_move(player)
+    return input if input == 'exit'
+
     move_pieces(cloned_board.board, player.select_piece, player.select_sqr_to_place)
   end
 
@@ -135,11 +148,19 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
         return if verify_check?(player) && @check.check_mate?(player.color_pick, @board.board)
 
         if verify_check?(player)
-          prompt_user_to_escape_check(player)
+          input = prompt_user_to_escape_check(player)
+          @exit_game = 'exit' if input == 'exit'
+          if input == 'exit'
+            save_game
+            return 'exit'
+          end
+
           next
         end
-        register_move(player, @board)
-        @winner_name = player.name
+        @exit_game = register_move(player, @board)
+        return if @exit_game == 'exit'
+
+        @winner_name = player.name if @exit_game.nil?
       end
     end
   end
@@ -155,8 +176,18 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
   def verify_illegal_move(player, board)
     while @check.illegal_move?(player.select_piece, player.select_sqr_to_place)
       illegal_move_message
-      select_piece(player, board)
-      select_sqr_to_place_move(player, board)
+      input = select_piece(player)
+      save_game if input == 'exit'
+
+      input = select_sqr_to_place_move(player)
+      save_game if input == 'exit'
+    end
+  end
+
+  def save_game
+    yaml = YAML.dump(self)
+    File.open('game_state.yaml', 'w') do |file|
+      file.write(yaml)
     end
   end
 end
