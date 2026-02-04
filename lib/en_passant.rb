@@ -7,6 +7,8 @@ module EnPassant # rubocop:disable Style/Documentation
   def en_passant(coord, board, piece_color)
     adjacent_coords = get_adjacent_coord(coord)
     enemy_pawns = enemy_pawn_on_adjacent_files(adjacent_coords, board, piece_color)
+    return if enemy_pawns.empty?
+
     sqr_passed_over_by_enemy_pawn(enemy_pawns, piece_color) if enemy_pawns.nil? == false
   end
 
@@ -64,6 +66,8 @@ module EnPassant # rubocop:disable Style/Documentation
       next unless piece.instance_of?(Pawn) && piece.fg_color != piece_color
 
       color = piece.fg_color
+      next if piece.previous_position.nil?
+
       enemy_pawn.push(piece) if moved_two_sqrs_in_initial_move?(piece.current_position, piece.previous_position,
                                                                 color) && piece.en_passant_capture_mode == true
     end
