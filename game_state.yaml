@@ -1,0 +1,537 @@
+--- !ruby/object:PlayGame
+board: &1 !ruby/object:Board
+  board: &2
+    '8':
+    - a: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Rook
+          piece_unicode: "♜ "
+          bg_color: :light_color
+          fg_color: :black
+          current_position: a8
+          legal_moves: []
+          previous_position: 
+    - b: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Knight
+          bg_color: :brown
+          fg_color: :black
+          piece_unicode: "♞ "
+          current_position: b8
+          possible_moves:
+          - d7
+          - a6
+          - c6
+          legal_moves:
+          - a6
+          - c6
+    - c: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Bishop
+          piece_unicode: "♝ "
+          bg_color: :light_color
+          fg_color: :black
+          current_position: c8
+          legal_moves: []
+    - d: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Queen
+          bg_color: :brown
+          fg_color: :black
+          piece_unicode: "♛ "
+          current_position: d8
+          legal_moves: []
+    - e: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:King
+          bg_color: :light_color
+          fg_color: :black
+          piece_unicode: "♚ "
+          current_position: e8
+          possible_moves:
+          - f8
+          - d8
+          - 
+          - e7
+          - 
+          - f7
+          - 
+          - d7
+          legal_moves:
+          - f7
+          previous_position: 
+    - f: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Bishop
+          piece_unicode: "♝ "
+          bg_color: :brown
+          fg_color: :black
+          current_position: f8
+          legal_moves: []
+    - g: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Knight
+          bg_color: :light_color
+          fg_color: :black
+          piece_unicode: "♞ "
+          current_position: g8
+          possible_moves:
+          - f6
+          - e7
+          - h6
+          legal_moves:
+          - f6
+          - h6
+    - h: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Rook
+          piece_unicode: "♜ "
+          bg_color: :brown
+          fg_color: :black
+          current_position: h8
+          legal_moves: []
+          previous_position: 
+    '7':
+    - a: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Pawn
+          bg_color: :brown
+          fg_color: :black
+          piece_unicode: "♟ "
+          current_position: a7
+          legal_moves:
+          - a5
+          - a6
+          previous_position: 
+          en_passant_capture_mode: 
+    - b: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Pawn
+          bg_color: :light_color
+          fg_color: :black
+          piece_unicode: "♟ "
+          current_position: b7
+          legal_moves:
+          - b5
+          - b6
+          previous_position: 
+          en_passant_capture_mode: 
+    - c: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Pawn
+          bg_color: :brown
+          fg_color: :black
+          piece_unicode: "♟ "
+          current_position: c7
+          legal_moves:
+          - c5
+          - c6
+          previous_position: 
+          en_passant_capture_mode: 
+    - d: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Pawn
+          bg_color: :light_color
+          fg_color: :black
+          piece_unicode: "♟ "
+          current_position: d7
+          legal_moves:
+          - d5
+          - d6
+          previous_position: 
+          en_passant_capture_mode: 
+    - e: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Pawn
+          bg_color: :brown
+          fg_color: :black
+          piece_unicode: "♟ "
+          current_position: e7
+          legal_moves:
+          - e5
+          - e6
+          previous_position: 
+          en_passant_capture_mode: 
+    - f: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - g: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Pawn
+          bg_color: :brown
+          fg_color: :black
+          piece_unicode: "♟ "
+          current_position: g7
+          legal_moves:
+          - g5
+          - g6
+          previous_position: 
+          en_passant_capture_mode: 
+    - h: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Pawn
+          bg_color: :light_color
+          fg_color: :black
+          piece_unicode: "♟ "
+          current_position: h7
+          legal_moves:
+          - h6
+          previous_position: 
+          en_passant_capture_mode: 
+    '6':
+    - a: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - b: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - c: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - d: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - e: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - f: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - g: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - h: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    '5':
+    - a: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - b: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - c: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - d: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - e: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - f: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Pawn
+          bg_color: :light_color
+          fg_color: :black
+          piece_unicode: "♟ "
+          current_position: f5
+          legal_moves:
+          - f4
+          - e4
+          previous_position: f7
+          en_passant_capture_mode: false
+    - g: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - h: &6 !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Queen
+          bg_color: :light_color
+          fg_color: :white
+          piece_unicode: "♛ "
+          current_position: h5
+          legal_moves:
+          - g6
+          - f7
+          - e8
+          - g4
+          - f3
+          - e2
+          - d1
+          - g5
+          - f5
+          - h4
+          - h3
+          - h6
+          - h7
+    '4':
+    - a: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - b: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - c: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - d: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - e: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Pawn
+          bg_color: :light_color
+          fg_color: :white
+          piece_unicode: "♟ "
+          current_position: e4
+          legal_moves:
+          - e5
+          - f5
+          previous_position: e2
+          en_passant_capture_mode: false
+    - f: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - g: &5 !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - h: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    '3':
+    - a: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - b: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - c: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - d: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - e: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - f: &4 !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - g: !ruby/object:Square
+        color: :brown
+        piece: "  "
+    - h: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    '2':
+    - a: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Pawn
+          bg_color: :light_color
+          fg_color: :white
+          piece_unicode: "♟ "
+          current_position: a2
+          legal_moves:
+          - a4
+          - a3
+          previous_position: 
+          en_passant_capture_mode: 
+    - b: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Pawn
+          bg_color: :brown
+          fg_color: :white
+          piece_unicode: "♟ "
+          current_position: b2
+          legal_moves:
+          - b4
+          - b3
+          previous_position: 
+          en_passant_capture_mode: 
+    - c: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Pawn
+          bg_color: :light_color
+          fg_color: :white
+          piece_unicode: "♟ "
+          current_position: c2
+          legal_moves:
+          - c4
+          - c3
+          previous_position: 
+          en_passant_capture_mode: 
+    - d: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Pawn
+          bg_color: :brown
+          fg_color: :white
+          piece_unicode: "♟ "
+          current_position: d2
+          legal_moves:
+          - d4
+          - d3
+          previous_position: 
+          en_passant_capture_mode: 
+    - e: &3 !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - f: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Pawn
+          bg_color: :brown
+          fg_color: :white
+          piece_unicode: "♟ "
+          current_position: f2
+          legal_moves:
+          - f4
+          - f3
+          previous_position: 
+          en_passant_capture_mode: 
+    - g: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Pawn
+          bg_color: :light_color
+          fg_color: :white
+          piece_unicode: "♟ "
+          current_position: g2
+          legal_moves:
+          - g4
+          - g3
+          previous_position: 
+          en_passant_capture_mode: 
+    - h: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Pawn
+          bg_color: :brown
+          fg_color: :white
+          piece_unicode: "♟ "
+          current_position: h2
+          legal_moves:
+          - h4
+          - h3
+          previous_position: 
+          en_passant_capture_mode: 
+    '1':
+    - a: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Rook
+          piece_unicode: "♜ "
+          bg_color: :brown
+          fg_color: :white
+          current_position: a1
+          legal_moves: []
+          previous_position: 
+    - b: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Knight
+          bg_color: :light_color
+          fg_color: :white
+          piece_unicode: "♞ "
+          current_position: b1
+          possible_moves:
+          - d2
+          - c3
+          - a3
+          legal_moves:
+          - c3
+          - a3
+    - c: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Bishop
+          piece_unicode: "♝ "
+          bg_color: :brown
+          fg_color: :white
+          current_position: c1
+          legal_moves: []
+    - d: !ruby/object:Square
+        color: :light_color
+        piece: "  "
+    - e: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:King
+          bg_color: :brown
+          fg_color: :white
+          piece_unicode: "♚ "
+          current_position: e1
+          possible_moves:
+          - f1
+          - d1
+          - e2
+          - 
+          - f2
+          - 
+          - d2
+          - 
+          legal_moves:
+          - d1
+          - e2
+          previous_position: 
+    - f: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Bishop
+          piece_unicode: "♝ "
+          bg_color: :light_color
+          fg_color: :white
+          current_position: f1
+          legal_moves:
+          - e2
+          - d3
+          - c4
+          - b5
+          - a6
+    - g: !ruby/object:Square
+        color: :brown
+        piece: !ruby/object:Knight
+          bg_color: :brown
+          fg_color: :white
+          piece_unicode: "♞ "
+          current_position: g1
+          possible_moves:
+          - h3
+          - f3
+          - e2
+          legal_moves:
+          - h3
+          - f3
+          - e2
+    - h: !ruby/object:Square
+        color: :light_color
+        piece: !ruby/object:Rook
+          piece_unicode: "♜ "
+          bg_color: :light_color
+          fg_color: :white
+          current_position: h1
+          legal_moves: []
+          previous_position: 
+  alphabetic_coords:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+  - h
+player1: !ruby/object:Player
+  name: sara
+  color_pick: :white
+  board_obj: *1
+  select_piece: d1
+  select_sqr_to_place: h5
+  board: *2
+player2: !ruby/object:Player
+  name: ruby
+  color_pick: :black
+  board_obj: *1
+  select_piece: f7
+  select_sqr_to_place: f5
+  board: *2
+game_features: !ruby/object:GameFeatures
+  board: *2
+  board_obj: *1
+  piece_color: :white
+  marked_sqr:
+  - *3
+  - *4
+  - *5
+  - *6
+  captured_sqr: []
+check: !ruby/object:Check
+  board: *1
+  color: :white
+  player_color: :black
+  number_of_check: 1
+  move_to_escape_check: 1
+winner_name: sara
+exit_game: exit
