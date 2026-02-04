@@ -17,15 +17,24 @@ class Player # rubocop:disable Style/Documentation
   end
 
   def prompt_player_to_select_piece
-    @select_piece = verify_player_color_pick(check_empty_sqr(verify_input(gets.chomp)))
+    input = gets.chomp
+    return input if input == 'exit'
+
+    input = verify_input(input)
+    return input if input == 'exit'
+
+    input = check_empty_sqr(input)
+    @select_piece = verify_player_color_pick(input)
     check_piece_has_legal_moves
   end
 
   def prompt_player_to_select_sqr
     @select_sqr_to_place = gets.chomp
+    return 'exit' if @select_sqr_to_place == 'exit'
     return if @select_sqr_to_place == 'back'
 
-    check_for_accurate_move
+    move = check_for_accurate_move
+    'exit' if move == 'exit'
   end
 
   private
@@ -35,9 +44,12 @@ class Player # rubocop:disable Style/Documentation
       no_legal_moves_message
       @select_piece = verify_player_color_pick(verify_input(gets.chomp))
     end
+    'exit' if @select_piece == 'exit'
   end
 
   def selected_piece_has_legal_moves?
+    return 'exit' if @select_piece == 'exit'
+
     piece = get_the_sqr_obj(@select_piece).piece
     legal_moves = piece.get_legal_moves(@board)
     return true if legal_moves.empty? == false
@@ -50,9 +62,12 @@ class Player # rubocop:disable Style/Documentation
       invalid_move_for_piece_message(@select_sqr_to_place)
       @select_sqr_to_place = gets.chomp
     end
+    'exit' if @select_sqr_to_place == 'exit'
   end
 
   def accurate_move?(move)
+    return 'exit' if @select_sqr_to_place == 'exit'
+
     piece = get_the_sqr_obj(@select_piece).piece
     valid_moves = piece.get_legal_moves(@board)
     if piece.instance_of?(King) && piece.legal_castling_moves(@board_obj).empty? == false
@@ -64,7 +79,11 @@ class Player # rubocop:disable Style/Documentation
   end
 
   def verify_player_color_pick(coord)
+    return 'exit' if coord == 'exit'
+
     until accurate_color_selection?(coord)
+      return 'exit' if coord == 'exit'
+
       choose_your_piece_message(coord)
       coord = verify_input(gets.chomp)
     end
@@ -72,6 +91,8 @@ class Player # rubocop:disable Style/Documentation
   end
 
   def accurate_color_selection?(coord)
+    return 'exit' if coord == 'exit'
+
     piece_color = get_the_sqr_obj(coord).piece.fg_color
     piece_color == @color_pick
   end
@@ -89,11 +110,18 @@ class Player # rubocop:disable Style/Documentation
   end
 
   def verify_input(input)
-    invalid_coord(invalid_input(input))
+    input = invalid_input(input)
+    return 'exit' if input == 'exit'
+
+    invalid_coord(input)
   end
 
   def invalid_coord(coord)
+    return 'exit' if coord == 'exit'
+
     until valid_move?(coord)
+      return 'exit' if coord == 'exit'
+
       invalid_user_input_message
       coord = invalid_input(gets.chomp)
     end
@@ -101,7 +129,11 @@ class Player # rubocop:disable Style/Documentation
   end
 
   def invalid_input(user_input)
+    return 'exit' if user_input == 'exit'
+
     until user_input.length == 2 && user_input != ''
+      return 'exit' if user_input == 'exit'
+
       invalid_input_message(user_input, 'input')
       user_input = gets.chomp
     end
@@ -117,6 +149,8 @@ class Player # rubocop:disable Style/Documentation
   end
 
   def non_empty_sqr?(coord)
+    return 'exit' if coord == 'exit'
+
     sqr = get_the_sqr_obj(coord)
     return true if sqr.piece != '  '
 
@@ -128,6 +162,8 @@ class Player # rubocop:disable Style/Documentation
       empty_sqr_message
       coord = verify_input(gets.chomp)
     end
+    return 'exit' if coord == 'exit'
+
     coord
   end
 end
