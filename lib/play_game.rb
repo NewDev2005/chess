@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'yaml'
-
 require_relative 'board'
 require_relative 'player'
 require_relative 'instruction'
@@ -150,10 +148,7 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
         if verify_check?(player)
           input = prompt_user_to_escape_check(player)
           @exit_game = 'exit' if input == 'exit'
-          if input == 'exit'
-            save_game
-            return 'exit'
-          end
+          return 'exit' if input == 'exit'
 
           next
         end
@@ -177,17 +172,10 @@ class PlayGame # rubocop:disable Style/Documentation,Metrics/ClassLength
     while @check.illegal_move?(player.select_piece, player.select_sqr_to_place)
       illegal_move_message
       input = select_piece(player)
-      save_game if input == 'exit'
+      return 'exit' if input == 'exit'
 
       input = select_sqr_to_place_move(player)
-      save_game if input == 'exit'
-    end
-  end
-
-  def save_game
-    yaml = YAML.dump(self)
-    File.open('game_state.yaml', 'w') do |file|
-      file.write(yaml)
+      return 'exit' if input == 'exit'
     end
   end
 end
